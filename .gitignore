@@ -9,6 +9,7 @@
 /bower_components
 
 # IDEs and editors
+.idea/workspace.xml
 .project
 .classpath
 *.launch
@@ -30,3 +31,4 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
+
