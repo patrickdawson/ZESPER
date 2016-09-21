@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Meal } from '../shared';
 
 @Component({
   selector: 'ze-overview',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styles: []
 })
 export class OverviewComponent implements OnInit {
+  meal = new Meal('Leberkäse');
 
   constructor() { }
 
