@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Meal } from '../shared';
+import { Food } from '../shared';
 
 @Component({
   selector: 'ze-overview',
@@ -7,7 +7,7 @@ import { Meal } from '../shared';
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit {
-  meal = new Meal('Leberkäse');
+  meal = new Food('Leberkäse', 1.80);
 
   constructor() { }
 
