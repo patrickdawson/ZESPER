@@ -10,6 +10,7 @@ import { OverviewComponent } from './overview/overview.component';
 import { OrderComponent } from './order/order.component';
 import { Routing } from './app.routing';
 import { AdminComponent } from './admin/admin.component';
+import { MealService } from './services/meal.service';
 
 @NgModule({
     declarations: [
@@ -21,10 +22,10 @@ import { AdminComponent } from './admin/admin.component';
         BrowserModule,
         FormsModule,
         HttpModule,
-        Routing,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        Routing
     ],
-    providers: [],
+    providers: [MealService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
