@@ -1,16 +1,26 @@
 import { Injectable } from '@angular/core';
-import { IMeal } from '../shared';
+import { IFood } from '../shared';
 
 @Injectable()
 export class MealService {
 
   constructor() { }
 
-  getMealOfTheWeek(): IMeal {
-    return {
-      name: 'Leberkäse',
-      cost: 1.60
-    };
+  getMealOfTheWeek(): [IFood] {
+    return [
+      {
+        name: 'Leberkäse',
+        price: 1.60
+      },
+      {
+        name: 'Wasserwecken',
+        price: 0.80
+      },
+      {
+        name: 'Normaler Wecken',
+        price: 0.40
+      },
+    ];
   }
 
 }

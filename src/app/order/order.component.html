@@ -1,27 +1,31 @@
 <div class="row">
   <div class="col-xs-12">
-    <h3>Diese Woche gibt es: {{meal.name}}</h3>
+    <h3>Diese Woche gibt es: </h3>
     <form [formGroup]="orderForm" (ngSubmit)="onOrder()">
       <div>
         <div class="form-group">
-          <label for="main-dish-count">Anzahl {{meal.name}}:</label>
+          <label for="customer">Besteller:</label>
           <input type="text"
                  class="form-control"
-                 id="main-dish-count"
-                 formControlName="mainDishCount" (keyup)="onMainDishCountChange()">
+                 id="customer"
+                 formControlName="customer">
+        </div>
+        <div formArrayName="foods">
+          <div class="form-group"
+               *ngFor="let food of orderForm.controls['foods'].controls; let i = index">
+            <label htmlFor="id-{{foods[i].name}}">Anzahl {{foods[i].name}}:</label>
+            <input type="number"
+                   class="form-control"
+                   id="id-{{foods[i].name}}"
+                   formControlName="{{i}}"
+                   (keyup)="onOrderInputChange()">
+          </div>
         </div>
         <div class="form-group">
-          <label for="side-dish-count">Anzahl Wasserwecken:</label>
-          <input type="text"
-                 class="form-control"
-                 id="side-dish-count"
-                 formControlName="sideDishCount">
-        </div>
-        <div class="form-group">
-          <label for="side-dish-count">Voraussichtliche Kosten: {{totalCost | currency:'EUR':true}}</label>
+          <label>Voraussichtliche Kosten: {{this.order.totalCost | currency:'EUR':true}}</label>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!orderForm.valid">Submit</button>
       </div>
     </form>
   </div>

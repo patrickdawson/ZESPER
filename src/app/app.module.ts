@@ -11,22 +11,29 @@ import { OrderComponent } from './order/order.component';
 import { Routing } from './app.routing';
 import { AdminComponent } from './admin/admin.component';
 import { MealService } from './services/meal.service';
+import { OrderService } from './services/order.service';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HeaderComponent,
-        DropdownDirective, OverviewComponent, OrderComponent, AdminComponent
-    ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        HttpModule,
-        ReactiveFormsModule,
-        Routing
-    ],
-    providers: [MealService],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    DropdownDirective,
+    OverviewComponent,
+    OrderComponent,
+    AdminComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    ReactiveFormsModule,
+    Routing
+  ],
+  providers: [
+    MealService,
+    OrderService
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

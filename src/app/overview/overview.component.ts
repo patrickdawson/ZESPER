@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Food } from '../shared';
+import { OrderService } from '../services/order.service';
+import { MealService } from '../services/meal.service';
+import { IFood } from '../shared';
+import { Order } from '../shared/order';
 
 @Component({
   selector: 'ze-overview',
@@ -7,11 +10,29 @@ import { Food } from '../shared';
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit {
-  meal = new Food('Leberkäse', 1.80);
+  private selectedItem = -1;
+  private meal: IFood;
+  private orders: Order[] = [];
+  private totalCost: number = 0;
 
-  constructor() { }
+  constructor(private orderService: OrderService, private mealService: MealService) { }
 
   ngOnInit() {
+    this.meal = this.mealService.getMealOfTheWeek()[0];
+    this.orders = this.orderService.getAllOrders();
+
+    this.totalCost = 0;
+    for (let order of this.orders) {
+      this.totalCost = order.totalCost;
+    }
   }
 
+  onSelect(index: number) {
+    this.selectedItem = index;
+  }
+
+  deleteSelected() {
+    this.orders.splice(this.selectedItem, 1);
+    this.selectedItem = -1;
+  }
 }

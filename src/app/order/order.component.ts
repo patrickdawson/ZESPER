@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { MealService } from '../services/meal.service';
-import { IMeal } from '../shared';
+import { OrderService } from '../services/order.service';
+import { Order } from '../shared';
+import { IFood } from '../shared/IFood';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ze-order',
@@ -10,27 +13,54 @@ import { IMeal } from '../shared';
 })
 export class OrderComponent implements OnInit {
   orderForm: FormGroup;
-  private meal: IMeal;
-  private totalCost = 0;
+  private foods: [IFood];
+  private order: Order;
 
-  constructor(private mealService: MealService) {
+  constructor(private mealService: MealService,
+              private orderService: OrderService,
+              private formBuilder: FormBuilder,
+              private router: Router) {
   }
 
   ngOnInit() {
-    this.orderForm = new FormGroup({
-      'mainDishCount': new FormControl(),
-      'sideDishCount': new FormControl()
+    this.order = new Order();
+    this.foods = this.mealService.getMealOfTheWeek();
+
+    this.orderForm = this.formBuilder.group({
+      'customer': ['', Validators.required],
+      'foods': this.formBuilder.array([])
     });
 
-    this.meal = this.mealService.getMealOfTheWeek();
+    for (let food of this.foods) {
+      (<FormArray>this.orderForm.controls['foods']).push(new FormControl(0, Validators.required));
+    }
+
+    this.updateOrder();
+
   }
 
-  onMainDishCountChange() {
-    this.totalCost = this.orderForm.value.mainDishCount * this.meal.cost;
+  onOrderInputChange() {
+    this.updateOrder();
+  }
+
+  private updateOrder() {
+    this.order.removeAll();
+
+    for (let i = 0; i < this.foods.length; ++i) {
+      let quantity = this.orderForm.controls['foods'].value[i];
+      if (quantity > 0) {
+        this.order.orderFood(this.foods[i], quantity);
+      }
+    }
   }
 
   onOrder() {
-    console.log(this.orderForm);
+    console.log(JSON.stringify(this.order));
+
+    this.order.customer = this.orderForm.controls['customer'].value;
+    this.orderService.placeOrder(this.order);
+
+    this.router.navigate(['/']);
   }
 
 }
