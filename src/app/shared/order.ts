@@ -13,7 +13,7 @@ export class Order {
 
   orderFood(food: IFood, quantity: number) {
     let foundEntry = <OrderItem>(_.find(this._entries, (entry) => {
-      return entry.name === food.name;
+      return entry.food.name === food.name;
     }));
 
     if (!foundEntry) {
