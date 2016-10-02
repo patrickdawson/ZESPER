@@ -1,25 +1,16 @@
 import { Injectable } from '@angular/core';
-import { IFood } from '../shared';
+import { Food } from '../shared/food';
 
 @Injectable()
 export class MealService {
 
   constructor() { }
 
-  getMealOfTheWeek(): [IFood] {
+  getMealOfTheWeek(): [Food] {
     return [
-      {
-        name: 'Leberkäse',
-        price: 1.60
-      },
-      {
-        name: 'Wasserwecken',
-        price: 0.80
-      },
-      {
-        name: 'Normaler Wecken',
-        price: 0.40
-      },
+      new Food('Leberkäse', 1.60, 1),
+      new Food('Leberkäse', 0.80, 1),
+      new Food('Leberkäse', 0.40, 0)
     ];
   }
 

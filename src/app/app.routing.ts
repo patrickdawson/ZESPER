@@ -5,9 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { OverviewComponent } from './overview/overview.component';
 import { OrderComponent } from './order/order.component';
 import { AdminComponent } from './admin/admin.component';
+import { OVERVIEW_ROUTES } from './overview/overview.routes';
 
 const APP_ROUTES: Routes = [
-    { path: '', component: OverviewComponent },
+    { path: '', redirectTo: '/overview', pathMatch: 'full'},
+    { path: 'overview', component: OverviewComponent },
+    { path: 'overview', component: OverviewComponent, children: OVERVIEW_ROUTES },
     { path: 'order', component: OrderComponent },
     { path: 'admin', component: AdminComponent }
 ];

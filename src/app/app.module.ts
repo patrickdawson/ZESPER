@@ -12,6 +12,9 @@ import { Routing } from './app.routing';
 import { AdminComponent } from './admin/admin.component';
 import { MealService } from './services/meal.service';
 import { OrderService } from './services/order.service';
+import { OverviewListComponent } from './overview/overview-list/overview-list.component';
+import { OverviewDetailComponent } from './overview/overview-detail/overview-detail.component';
+import { OverviewListItemComponent } from './overview/overview-list/overview-list-item.component';
 
 @NgModule({
   declarations: [
@@ -20,14 +23,17 @@ import { OrderService } from './services/order.service';
     DropdownDirective,
     OverviewComponent,
     OrderComponent,
-    AdminComponent
+    AdminComponent,
+    OverviewListComponent,
+    OverviewDetailComponent,
+    OverviewListItemComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
-    Routing
+    Routing,
   ],
   providers: [
     MealService,

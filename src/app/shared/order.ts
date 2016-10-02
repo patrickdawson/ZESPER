@@ -1,38 +1,48 @@
 import * as _ from 'lodash';
-import { IFood } from './IFood';
-import { OrderItem } from './OrderItem';
+import { Food } from './food';
+import { Serializeable } from './serializeable';
 
+export class Order extends Serializeable {
+  private _foods: Food[];
 
-export class Order {
-  private _entries: OrderItem[] = [];
   public customer: string;
 
-
   constructor() {
+    super();
   }
 
-  orderFood(food: IFood, quantity: number) {
-    let foundEntry = <OrderItem>(_.find(this._entries, (entry) => {
-      return entry.food.name === food.name;
-    }));
-
-    if (!foundEntry) {
-      this._entries.push(new OrderItem(food, quantity));
-    } else {
-      foundEntry.quantity = quantity;
-    }
-  }
-
-  removeAll() {
-    this._entries = [];
+  get foods() {
+    return this._foods;
   }
 
   get totalCost() {
-    return _.sumBy(this._entries, function(o) { return o.totalCost; });
+    return _.sumBy(this.foods, function(food) { return food.cost; });
   }
 
-  get entries() {
-    return this._entries;
+  addFood(food: Food) {
+    this._foods.push(food);
   }
 
+  removeFood(name: string) {
+    _.remove(this._foods, food => food.name === name);
+  }
+
+  removeAll() {
+    this._foods = [];
+  }
+
+  import(data: Object): any {
+    this.removeAll();
+    _.forOwn(data, (value, key) => {
+      if ('_foods' === key) {
+        _.forOwn(value, foodData => {
+          let food = new Food('', 0, 0);
+          food.import(foodData);
+          this._foods.push(food);
+        });
+      } else {
+        this[key] = value;
+      }
+    });
+  }
 }

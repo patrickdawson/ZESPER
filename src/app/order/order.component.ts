@@ -3,8 +3,8 @@ import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@ang
 import { MealService } from '../services/meal.service';
 import { OrderService } from '../services/order.service';
 import { Order } from '../shared';
-import { IFood } from '../shared/IFood';
 import { Router } from '@angular/router';
+import { Food } from '../shared/food';
 
 @Component({
   selector: 'ze-order',
@@ -13,8 +13,9 @@ import { Router } from '@angular/router';
 })
 export class OrderComponent implements OnInit {
   orderForm: FormGroup;
-  private foods: [IFood];
+  private foods: [Food];
   private order: Order;
+  private meal: Food;
 
   constructor(private mealService: MealService,
               private orderService: OrderService,
@@ -25,6 +26,7 @@ export class OrderComponent implements OnInit {
   ngOnInit() {
     this.order = new Order();
     this.foods = this.mealService.getMealOfTheWeek();
+    this.meal = this.foods[0];
 
     this.orderForm = this.formBuilder.group({
       'customer': ['', Validators.required],
@@ -32,7 +34,7 @@ export class OrderComponent implements OnInit {
     });
 
     for (let food of this.foods) {
-      (<FormArray>this.orderForm.controls['foods']).push(new FormControl(0, Validators.required));
+      (<FormArray>this.orderForm.controls['foods']).push(new FormControl(food.quantity, Validators.required));
     }
 
     this.updateOrder();
@@ -49,18 +51,16 @@ export class OrderComponent implements OnInit {
     for (let i = 0; i < this.foods.length; ++i) {
       let quantity = this.orderForm.controls['foods'].value[i];
       if (quantity > 0) {
-        this.order.orderFood(this.foods[i], quantity);
+        this.foods[i].quantity = quantity;
+        this.order.addFood(this.foods[i]);
       }
     }
   }
 
   onOrder() {
-    console.log(JSON.stringify(this.order));
-
     this.order.customer = this.orderForm.controls['customer'].value;
     this.orderService.placeOrder(this.order);
 
     this.router.navigate(['/']);
   }
-
 }

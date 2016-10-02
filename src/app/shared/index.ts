@@ -1,2 +1,2 @@
-export * from './IFood';
+export * from './food';
 export * from './order';
