@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Voraussichtliche Kosten: {{this.order.totalCost | currency:'EUR':true}}</label>
+          <p class="bg-info">Voraussichtliche Kosten: {{this.order.totalCost | currency:'EUR':true}}  </p>
         </div>
 
         <button type="submit" class="btn btn-primary" [disabled]="!orderForm.valid">Submit</button>

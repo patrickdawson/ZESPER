@@ -68,7 +68,7 @@ export class OrderService {
       this.http.delete(`https://zesper-3300e.firebaseio.com/orders/${idToDelete}.json`)
         .subscribe(data => {
           console.log(data);
-          this.fetchOrders():
+          this.fetchOrders();
         });
     }
   }
