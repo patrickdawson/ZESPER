@@ -4,15 +4,15 @@
   </h2>
 </div>
 <div class="row">
-  <div>
-    <h3>Aktuelle Bestellung: 4,10 €</h3>
-    <ul class="list-group">
-      <li class="list-group-item">
-        Max<span class="pull-right">2,30 €</span>
-      </li>
-      <li class="list-group-item">
-        Moritz<span class="pull-right">1,80 €</span>
-      </li>
-    </ul>
+  <h3>Aktuelle Bestellung: {{totalCost | currency: "EUR"}}</h3>
+</div>
+<div class="row">
+  <div class="row">
+    <div class="col-md-5">
+      <ze-overview-list></ze-overview-list>
+    </div>
+    <div class="col-md-7">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>
