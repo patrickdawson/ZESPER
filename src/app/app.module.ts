@@ -15,6 +15,8 @@ import { OrderService } from './services/order.service';
 import { OverviewListComponent } from './overview/overview-list/overview-list.component';
 import { OverviewDetailComponent } from './overview/overview-detail/overview-detail.component';
 import { OverviewListItemComponent } from './overview/overview-list/overview-list-item.component';
+import { SignupComponent } from './header/signup/signup.component';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { OverviewListItemComponent } from './overview/overview-list/overview-lis
     AdminComponent,
     OverviewListComponent,
     OverviewDetailComponent,
-    OverviewListItemComponent
+    OverviewListItemComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +40,8 @@ import { OverviewListItemComponent } from './overview/overview-list/overview-lis
   ],
   providers: [
     MealService,
-    OrderService
+    OrderService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

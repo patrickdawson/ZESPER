@@ -10,7 +10,7 @@
       <ul class="nav navbar-nav">
         <li routerLinkActive="active" [routerLink]="['overview']" [routerLinkActiveOptions]="{exact: true}"><a>Übersicht</a></li>
         <li routerLinkActive="active" [routerLink]="['order']"><a>Bestellen</a></li>
-        <li routerLinkActive="active" [routerLink]="['admin']"><a>Admin</a></li>
+        <!--<li routerLinkActive="active" [routerLink]="['admin']"><a>Admin</a></li>-->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown" zedropdown>
@@ -19,7 +19,7 @@
              aria-haspopup="true"
              aria-expanded="false">Anmelden<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a>Registrieren</a></li>
+            <li><a [routerLink]="['signup']">Registrieren</a></li>
             <li><a>Anmelden</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="#">Abmelden</a></li>
