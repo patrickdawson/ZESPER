@@ -11,8 +11,10 @@ export class SignupComponent implements OnInit {
 
   private signupForm: FormGroup;
   private error: string;
+  private success: boolean;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) {
+  constructor(private formBuilder: FormBuilder,
+              private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -24,13 +26,18 @@ export class SignupComponent implements OnInit {
       ]],
       'password': ['', Validators.required]
     });
+
+    this.error = null;
+    this.success = false;
   }
 
   signup() {
     const email = this.signupForm.controls['email'].value;
     const password = this.signupForm.controls['password'].value;
     this.authService.signup(email, password)
-      .then(() => this.error = null)
+      .then(() => {
+        this.success = true;
+      })
       .catch(error => {
         this.error = error;
       });

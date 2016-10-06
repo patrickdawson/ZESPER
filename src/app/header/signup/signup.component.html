@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-xs-12">
     <h2>Anmeldeformular</h2>
-    <form [formGroup]="signupForm" (ngSubmit)="signup()">
+    <form [formGroup]="signupForm" (ngSubmit)="signup()" *ngIf="!success">
       <div>
         <div class="form-group">
           <label for="email">Email:</label>
@@ -20,6 +20,14 @@
         <button type="submit" class="btn btn-primary" [disabled]="!signupForm.valid">Registrieren</button>
       </div>
     </form>
+  </div>
+  <div class="col-xs-12" *ngIf="success">
+    <br>
+    <div class="bg-success">
+      <p>
+        Deine Anmeldung war erfolgreich. Du kannst Dich jetzt anmelden!
+      </p>
+    </div>
   </div>
   <div class="col-xs-12" *ngIf="error">
     <br>
