@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import 'rxjs/Rx';
 import { Http, Headers, Response } from '@angular/http';
 import { Order } from '../shared';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class OrderService {
@@ -11,7 +12,8 @@ export class OrderService {
 
   public ordersChanged = new EventEmitter<Order[]>();
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+              private authService: AuthService) {
   }
 
 
@@ -21,7 +23,7 @@ export class OrderService {
       'Content-Type': 'application/json'
     });
 
-    this.http.post('https://zesper-3300e.firebaseio.com/orders.json', body, headers).subscribe(
+    this.http.post(`https://zesper-3300e.firebaseio.com/orders.json?access_token=${this.authService.getToken()}`, body, headers).subscribe(
       data => {
         console.log(data);
         this._orders.push(order);
@@ -37,19 +39,22 @@ export class OrderService {
   }
 
   fetchOrders() {
-    return this.http.get('https://zesper-3300e.firebaseio.com/orders.json')
-      .map((response: Response) => response.json())
-      .subscribe((data) => {
-        this._ordersInDatabase = data;
+    this.authService.getToken().then(token => {
+      this.http.get(`https://zesper-3300e.firebaseio.com/orders.json?access_token=${token}`)
+        .map((response: Response) => response.json())
+        .subscribe((data) => {
+          this._ordersInDatabase = data;
 
-        this._orders = [];
-        _.forOwn(data, orderData => {
-          let order = new Order();
-          order.import(orderData);
-          this._orders.push(order);
+          this._orders = [];
+          _.forOwn(data, orderData => {
+            let order = new Order();
+            order.import(orderData);
+            this._orders.push(order);
+          });
+          this.ordersChanged.emit(this._orders);
         });
-        this.ordersChanged.emit(this._orders);
-      });
+    });
+
   }
 
   getByCustomer(customer: string) {

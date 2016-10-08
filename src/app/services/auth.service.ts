@@ -11,5 +11,17 @@ export class AuthService {
   signup(email: string, password: string) {
     return firebase.auth().createUserWithEmailAndPassword(email, password)
   }
+
+  signin(email: string, password: string) {
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+  }
+
+  onAuthStateChanged(callback: (user)=>any) {
+    firebase.auth().onAuthStateChanged(callback);
+  }
+
+  getToken() {
+    return firebase.auth().currentUser.getToken();
+  }
 }
 
