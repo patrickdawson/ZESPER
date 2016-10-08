@@ -17,6 +17,7 @@ import { OverviewDetailComponent } from './overview/overview-detail/overview-det
 import { OverviewListItemComponent } from './overview/overview-list/overview-list-item.component';
 import { SignupComponent } from './header/signup/signup.component';
 import { AuthService } from './services/auth.service';
+import { SigninComponent } from './header/signin/signin.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AuthService } from './services/auth.service';
     OverviewListComponent,
     OverviewDetailComponent,
     OverviewListItemComponent,
-    SignupComponent
+    SignupComponent,
+    SigninComponent
   ],
   imports: [
     BrowserModule,

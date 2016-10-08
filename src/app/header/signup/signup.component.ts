@@ -5,7 +5,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'ze-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styles: []
 })
 export class SignupComponent implements OnInit {
 
@@ -24,7 +24,10 @@ export class SignupComponent implements OnInit {
         Validators.required,
         Validators.pattern(`[a-z0-9!#$%&'*+/=?^_\`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_\`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?`)
       ]],
-      'password': ['', Validators.required]
+      'passwords': this.formBuilder.group({
+        'password': ['', Validators.required],
+        'password2': ['', Validators.required]
+      }, {validator: this.passwordEqualValidator})
     });
 
     this.error = null;
@@ -33,14 +36,36 @@ export class SignupComponent implements OnInit {
 
   signup() {
     const email = this.signupForm.controls['email'].value;
-    const password = this.signupForm.controls['password'].value;
+    const password = (this.signupForm.controls['passwords'] as FormGroup).controls['password'].value;
     this.authService.signup(email, password)
       .then(() => {
+        this.error = null;
         this.success = true;
       })
       .catch(error => {
+        this.success = null;
         this.error = error;
       });
+  }
+
+  onChange() {
+    this.error = null;
+  }
+
+  passwordEqualValidator(formGroup: FormGroup): any {
+    const pass1 = formGroup.controls['password'].value as string;
+    const pass2 = formGroup.controls['password2'].value as string;
+    if (pass1 !== '') {
+      if (pass2 !== '') {
+        if (pass1 !== pass2) {
+          return {notIdentical: true};
+        }
+      } else {
+        return {notConfirmed: true};
+      }
+    }
+
+    return null;
   }
 
 }

@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-xs-12">
     <h2>Anmeldeformular</h2>
-    <form [formGroup]="signupForm" (ngSubmit)="signup()" *ngIf="!success">
+    <form [formGroup]="signupForm" (ngSubmit)="signup()" (keyup)="onChange()" *ngIf="!success">
       <div>
         <div class="form-group">
           <label for="email">Email:</label>
@@ -10,16 +10,30 @@
                  id="email"
                  formControlName="email">
         </div>
-        <div class="form-group">
+        <div class="form-group" formGroupName="passwords">
           <label for="password">Passwort:</label>
           <input type="password"
                  class="form-control"
                  id="password"
                  formControlName="password">
+          <label for="password2">Passwort Bestätigung:</label>
+          <input type="password"
+                 class="form-control"
+                 id="password2"
+                 formControlName="password2">
         </div>
         <button type="submit" class="btn btn-primary" [disabled]="!signupForm.valid">Registrieren</button>
       </div>
     </form>
+  </div>
+  <div class="col-xs-12" *ngIf="!signupForm.controls.passwords.valid && signupForm.controls.passwords.errors">
+    <br>
+    <div class="bg-danger" *ngIf="signupForm.controls['passwords'].errors.notIdentical">
+        Passwörter stimmen nicht überein.
+    </div>
+    <div class="bg-warning" *ngIf="signupForm.controls['passwords'].errors.notConfirmed">
+      Bitte Passwort bestätigen
+    </div>
   </div>
   <div class="col-xs-12" *ngIf="success">
     <br>
@@ -32,7 +46,7 @@
   <div class="col-xs-12" *ngIf="error">
     <br>
     <div class="bg-danger">
-      <p>Error: {{error}}</p>
+      <p>{{error}}</p>
     </div>
   </div>
 </div>
