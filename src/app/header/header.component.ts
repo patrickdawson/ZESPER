@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ze-header',
@@ -7,7 +9,16 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
-  constructor() {
+  constructor(private authService: AuthService,
+              private router: Router) {
+  }
+
+  signout() {
+    this.authService.signout().then(() => {
+      console.log('Successfully signed out');
+      this.router.navigate(['/overview']);
+    });
+
   }
 
 }

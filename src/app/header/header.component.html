@@ -22,7 +22,7 @@
             <li><a [routerLink]="['signup']">Registrieren</a></li>
             <li><a [routerLink]="['signin']">Anmelden</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Abmelden</a></li>
+            <li><a (click)="signout()">Abmelden</a></li>
           </ul>
         </li>
       </ul>

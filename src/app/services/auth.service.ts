@@ -16,6 +16,10 @@ export class AuthService {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
+  signout() {
+    return firebase.auth().signOut();
+  }
+
   onAuthStateChanged(callback: (user)=>any) {
     firebase.auth().onAuthStateChanged(callback);
   }

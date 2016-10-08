@@ -5,6 +5,8 @@ import { Http, Headers, Response } from '@angular/http';
 import { Order } from '../shared';
 import { AuthService } from './auth.service';
 
+declare var firebase;
+
 @Injectable()
 export class OrderService {
   private _ordersInDatabase = [];
@@ -39,7 +41,20 @@ export class OrderService {
   }
 
   fetchOrders() {
-    this.authService.getToken().then(token => {
+    firebase.database().ref('/orders').on('value', (snapshot) => {
+      this._ordersInDatabase = snapshot.val();
+      this._orders = [];
+
+      _.forOwn(this._ordersInDatabase, orderData => {
+        let order = new Order();
+        order.import(orderData);
+        this._orders.push(order);
+      });
+      this.ordersChanged.emit(this._orders);
+    });
+
+
+    /*this.authService.getToken().then(token => {
       this.http.get(`https://zesper-3300e.firebaseio.com/orders.json?access_token=${token}`)
         .map((response: Response) => response.json())
         .subscribe((data) => {
@@ -54,7 +69,7 @@ export class OrderService {
           this.ordersChanged.emit(this._orders);
         });
     });
-
+*/
   }
 
   getByCustomer(customer: string) {
