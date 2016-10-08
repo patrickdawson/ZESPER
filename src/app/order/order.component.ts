@@ -5,6 +5,7 @@ import { OrderService } from '../services/order.service';
 import { Order } from '../shared';
 import { Router } from '@angular/router';
 import { Food } from '../shared/food';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'ze-order',
@@ -19,11 +20,18 @@ export class OrderComponent implements OnInit {
 
   constructor(private mealService: MealService,
               private orderService: OrderService,
+              private authService: AuthService,
               private formBuilder: FormBuilder,
               private router: Router) {
   }
 
   ngOnInit() {
+    this.authService.onAuthStateChanged((user) => {
+      if (!user) {
+        this.router.navigate(['/signin']);
+      }
+    });
+
     this.order = new Order();
     this.foods = this.mealService.getMealOfTheWeek();
     this.meal = this.foods[0];

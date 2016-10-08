@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -7,10 +7,21 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  private authenticated: boolean = false;
 
   constructor(private authService: AuthService,
               private router: Router) {
+  }
+
+  ngOnInit(): void {
+    this.authService.onAuthStateChanged((user) => {
+      if (user) {
+        this.authenticated = true;
+      } else {
+        this.authenticated = false;
+      }
+    });
   }
 
   signout() {

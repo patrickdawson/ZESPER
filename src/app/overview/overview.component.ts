@@ -40,7 +40,7 @@ export class OverviewComponent implements OnInit {
       } else {
         this.authenticated = true;
       }
-    })
+    });
   }
 
   updateCost() {
