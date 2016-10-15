@@ -18,29 +18,21 @@ export class OrderService {
               private authService: AuthService) {
   }
 
-
-  placeOrder(order: Order) {
-    const body = order.export();
-    const headers = new Headers({
-      'Content-Type': 'application/json'
-    });
-
-    this.http.post(`https://zesper-3300e.firebaseio.com/orders.json?access_token=${this.authService.getToken()}`, body, headers).subscribe(
-      data => {
-        console.log(data);
-        this._orders.push(order);
-      },
-      error => {
-        console.error(error);
-      }
-    );
-  }
-
   getAllOrders() {
     return this._orders;
   }
 
-  fetchOrders() {
+  placeOrder(order: Order) {
+    // Get a key for a new Post.
+    let newPostKey = firebase.database().ref().child('orders').push().key;
+    let updateData = {};
+    updateData[`/orders/${newPostKey}`] = order;
+
+    firebase.database().ref().update(updateData);
+  }
+
+  listenForOrders() {
+    firebase.database().ref('/orders').off('value');
     firebase.database().ref('/orders').on('value', (snapshot) => {
       this._ordersInDatabase = snapshot.val();
       this._orders = [];
@@ -52,24 +44,6 @@ export class OrderService {
       });
       this.ordersChanged.emit(this._orders);
     });
-
-
-    /*this.authService.getToken().then(token => {
-      this.http.get(`https://zesper-3300e.firebaseio.com/orders.json?access_token=${token}`)
-        .map((response: Response) => response.json())
-        .subscribe((data) => {
-          this._ordersInDatabase = data;
-
-          this._orders = [];
-          _.forOwn(data, orderData => {
-            let order = new Order();
-            order.import(orderData);
-            this._orders.push(order);
-          });
-          this.ordersChanged.emit(this._orders);
-        });
-    });
-*/
   }
 
   getByCustomer(customer: string) {
@@ -88,7 +62,7 @@ export class OrderService {
       this.http.delete(`https://zesper-3300e.firebaseio.com/orders/${idToDelete}.json`)
         .subscribe(data => {
           console.log(data);
-          this.fetchOrders();
+          this.listenForOrders();
         });
     }
   }

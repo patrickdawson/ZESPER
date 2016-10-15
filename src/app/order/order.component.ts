@@ -26,12 +26,6 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.onAuthStateChanged((user) => {
-      if (!user) {
-        this.router.navigate(['/signin']);
-      }
-    });
-
     this.order = new Order();
     this.foods = this.mealService.getMealOfTheWeek();
     this.meal = this.foods[0];

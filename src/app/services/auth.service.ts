@@ -24,8 +24,12 @@ export class AuthService {
     firebase.auth().onAuthStateChanged(callback);
   }
 
-  getToken() {
-    return firebase.auth().currentUser.getToken();
+  isAuthenticated() {
+    if (firebase.auth().currentUser) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

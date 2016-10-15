@@ -18,6 +18,7 @@ import { OverviewListItemComponent } from './overview/overview-list/overview-lis
 import { SignupComponent } from './header/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { SigninComponent } from './header/signin/signin.component';
+import { AuthGuard } from './shared/auth.guard';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { SigninComponent } from './header/signin/signin.component';
   providers: [
     MealService,
     OrderService,
-    AuthService
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
