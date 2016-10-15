@@ -58,13 +58,7 @@ export class OrderService {
   deleteOrder(order: Order) {
     let idToDelete = _.findKey(this._ordersInDatabase, item => (<Order>item).customer === order.customer);
 
-    if (idToDelete) {
-      this.http.delete(`https://zesper-3300e.firebaseio.com/orders/${idToDelete}.json`)
-        .subscribe(data => {
-          console.log(data);
-          this.listenForOrders();
-        });
-    }
+    firebase.database().ref(`/orders/${idToDelete}`).remove();
   }
 
 }
