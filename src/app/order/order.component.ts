@@ -31,7 +31,6 @@ export class OrderComponent implements OnInit {
     this.meal = this.foods[0];
 
     this.orderForm = this.formBuilder.group({
-      'customer': ['', Validators.required],
       'foods': this.formBuilder.array([])
     });
 
@@ -60,7 +59,7 @@ export class OrderComponent implements OnInit {
   }
 
   onOrder() {
-    this.order.customer = this.orderForm.controls['customer'].value;
+    this.order.customer = this.authService.getCurrentUserEmail();
     this.orderService.placeOrder(this.order);
 
     this.router.navigate(['/']);
