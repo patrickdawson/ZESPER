@@ -6,7 +6,11 @@
   </div>
   <div>
     <div class="row">
-      <h3>Aktuelle Bestellung: {{totalCost | currency: "EUR"}}</h3>
+      <h3>Aktuelle Bestellung:</h3>
+      <h4>
+        <span *ngFor="let food of mealOfTheWeek">{{food.quantity}}x {{food.name}} </span>
+        {{totalCost | currency: "EUR"}}
+      </h4>
     </div>
     <div class="row">
       <div class="row">

@@ -15,6 +15,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
   private meal: Food;
   private orders: Order[] = [];
   private totalCost: number = 0;
+  private mealOfTheWeek: Food[] = [];
   private authenticated: boolean = false;
   private subscription;
   constructor(private orderService: OrderService,
@@ -24,11 +25,13 @@ export class OverviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.meal = this.mealService.getMealOfTheWeek()[0];
+    this.mealOfTheWeek = this.mealService.getMealOfTheWeek();
+    this.meal = this.mealOfTheWeek[0];
 
     this.subscription = this.orderService.ordersChanged.subscribe((orders: Order[]) => {
       this.orders = orders;
       this.updateCost();
+      this.updateQuantities();
     });
     this.orderService.listenForOrders();
 
@@ -46,6 +49,14 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.totalCost = 0;
     _.forOwn(this.orders, order => {
       this.totalCost += order.totalCost;
+    });
+  }
+
+  updateQuantities() {
+    _.forOwn(this.orders, order => {
+      _.forOwn(order.foods, (food, index) => {
+          this.mealOfTheWeek[index].quantity += food.quantity;
+      });
     });
   }
 
