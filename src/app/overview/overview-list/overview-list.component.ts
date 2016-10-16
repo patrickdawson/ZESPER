@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../shared';
+import { MealService } from '../../services/meal.service';
+import { Food } from '../../shared/food';
 
 @Component({
   selector: 'ze-overview-list',
@@ -9,9 +11,11 @@ import { Order } from '../../shared';
 })
 export class OverviewListComponent implements OnInit, OnDestroy {
   private orders: Order[] = [];
+  private mealOfTheWeek: Food[] = [];
   private subscription;
 
-  constructor(private orderService: OrderService) {
+  constructor(private orderService: OrderService,
+              private mealService: MealService) {
   }
 
   /*set orders(value) {
@@ -23,6 +27,7 @@ export class OverviewListComponent implements OnInit, OnDestroy {
   }*/
 
   ngOnInit() {
+    this.mealOfTheWeek = this.mealService.getMealOfTheWeek();
     this.orders = this.orderService.getAllOrders();
     this.subscription = this.orderService.ordersChanged.subscribe((orders: Order[]) => {
       this.orders = orders;

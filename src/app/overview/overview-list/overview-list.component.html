@@ -1,5 +1,12 @@
 <div>
-  <ul class="list-group">
-      <ze-overview-list-item *ngFor="let order of orders" [order]="order"></ze-overview-list-item>
-  </ul>
+  <table class="table">
+    <tr>
+      <th>Wer</th>
+      <th *ngFor="let food of mealOfTheWeek">{{food.name}}</th>
+    </tr>
+    <tr *ngFor="let order of orders">
+      <td>{{order.customer}}</td>
+      <td *ngFor="let food of order.foods">{{food.quantity}}</td>
+    </tr>
+  </table>
 </div>

@@ -1,5 +1,0 @@
-<a [routerLink]="[order.customer]" href="#" class="list-group-item clearfix" routerLinkActive="active">
-  {{order.customer}}<br>
-  <span *ngFor="let food of order.foods">{{food.quantity}}x {{food.name}} </span>
-  <span class="pull-right">{{order.totalCost | currency: "EUR"}}</span>
-</a>
