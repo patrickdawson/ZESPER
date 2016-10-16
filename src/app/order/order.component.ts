@@ -59,7 +59,14 @@ export class OrderComponent implements OnInit {
   }
 
   onOrder() {
-    this.order.customer = this.authService.getCurrentUserEmail();
+    const userEmail = this.authService.getCurrentUserEmail();
+
+    // Check if the user already has an existing order.
+    let currentOrder = this.orderService.getByCustomer(userEmail);
+    if (currentOrder) {
+      this.orderService.deleteOrder(currentOrder);
+    }
+    this.order.customer = userEmail;
     this.orderService.placeOrder(this.order);
 
     this.router.navigate(['/']);
