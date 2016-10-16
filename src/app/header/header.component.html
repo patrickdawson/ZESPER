@@ -17,7 +17,10 @@
         </li>
         <!--<li routerLinkActive="active" [routerLink]="['admin']"><a>Admin</a></li>-->
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <div class="nav navbar-nav navbar-right" *ngIf="authenticated">
+        <li><a (click)="signout()">Abmelden</a></li>
+      </div>
+      <ul class="nav navbar-nav navbar-right" *ngIf="!authenticated">
         <li class="dropdown" zedropdown>
           <a class="dropdown-toggle"
              role="button"
