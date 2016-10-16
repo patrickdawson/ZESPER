@@ -13,29 +13,38 @@ export class OverviewListComponent implements OnInit, OnDestroy {
   private orders: Order[] = [];
   private mealOfTheWeek: Food[] = [];
   private subscription;
+  private totalCost = 0;
 
   constructor(private orderService: OrderService,
               private mealService: MealService) {
   }
 
-  /*set orders(value) {
-    this._orders = value;
-  }
-
-  get orders() {
-    return this._orders;
-  }*/
-
   ngOnInit() {
     this.mealOfTheWeek = this.mealService.getMealOfTheWeek();
-    this.orders = this.orderService.getAllOrders();
+
     this.subscription = this.orderService.ordersChanged.subscribe((orders: Order[]) => {
       this.orders = orders;
+      this.updateSummary();
     });
+    this.orderService.listenForOrders();
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  updateSummary() {
+    this.totalCost = 0;
+    for (let food of this.mealOfTheWeek) {
+      food.quantity = 0;
+    }
+
+    _.forOwn(this.orders, order => {
+      this.totalCost += order.totalCost;
+      _.forOwn(order.foods, (food, index) => {
+        this.mealOfTheWeek[index].quantity += food.quantity;
+      });
+    });
   }
 
 }

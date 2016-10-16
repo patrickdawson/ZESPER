@@ -3,10 +3,17 @@
     <tr>
       <th>Wer</th>
       <th *ngFor="let food of mealOfTheWeek">{{food.name}}</th>
+      <th>Kosten</th>
     </tr>
     <tr *ngFor="let order of orders">
       <td>{{order.customer}}</td>
       <td *ngFor="let food of order.foods">{{food.quantity}}</td>
+      <td>{{order.totalCost | currency: "EUR"}}</td>
+    </tr>
+    <tr>
+      <td><b>SUMME</b></td>
+      <td *ngFor="let food of mealOfTheWeek">{{food.quantity}}</td>
+      <td>{{totalCost | currency: "EUR"}}</td>
     </tr>
   </table>
 </div>

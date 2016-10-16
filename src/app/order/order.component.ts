@@ -51,10 +51,8 @@ export class OrderComponent implements OnInit {
 
     for (let i = 0; i < this.foods.length; ++i) {
       let quantity = this.orderForm.controls['foods'].value[i];
-      if (quantity > 0) {
-        this.foods[i].quantity = quantity;
-        this.order.addFood(this.foods[i]);
-      }
+      this.foods[i].quantity = quantity;
+      this.order.addFood(this.foods[i]);
     }
   }
 
