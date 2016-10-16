@@ -4,8 +4,9 @@
 
 import { Routes } from '@angular/router';
 import { OverviewDetailComponent } from './overview-detail/overview-detail.component';
+import { AuthGuard } from '../shared/auth.guard';
 
 export const OVERVIEW_ROUTES: Routes = [
-  { path: ':customer', component: OverviewDetailComponent }
+  { path: ':customer', component: OverviewDetailComponent, canActivate: [AuthGuard] }
 ];
 

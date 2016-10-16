@@ -1,18 +1,23 @@
-<div class="row">
-  <h2>
-    Diese Woche gibt es: <b>{{meal.name}}</b>
-  </h2>
-</div>
-<div class="row">
-  <h3>Aktuelle Bestellung: {{totalCost | currency: "EUR"}}</h3>
-</div>
-<div class="row">
+<div [hidden]="!authenticated">
   <div class="row">
-    <div class="col-md-5">
-      <ze-overview-list></ze-overview-list>
+    <h2>
+      Diese Woche gibt es: <b>{{meal.name}}</b>
+    </h2>
+  </div>
+  <div>
+    <div class="row">
+      <h3>Aktuelle Bestellung: {{totalCost | currency: "EUR"}}</h3>
     </div>
-    <div class="col-md-7">
-      <router-outlet></router-outlet>
+    <div class="row">
+      <div class="row">
+        <div class="col-md-5">
+          <ze-overview-list></ze-overview-list>
+        </div>
+        <div class="col-md-7">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
     </div>
   </div>
+
 </div>

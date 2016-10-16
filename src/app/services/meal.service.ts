@@ -9,8 +9,8 @@ export class MealService {
   getMealOfTheWeek(): [Food] {
     return [
       new Food('Leberkäse', 1.60, 1),
-      new Food('Leberkäse', 0.80, 1),
-      new Food('Leberkäse', 0.40, 0)
+      new Food('Wasserwecken', 0.80, 1),
+      new Food('Normaler Wecken', 0.40, 0)
     ];
   }
 

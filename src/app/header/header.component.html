@@ -7,22 +7,30 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li routerLinkActive="active" [routerLink]="['overview']" [routerLinkActiveOptions]="{exact: true}"><a>Übersicht</a></li>
-        <li routerLinkActive="active" [routerLink]="['order']"><a>Bestellen</a></li>
-        <li routerLinkActive="active" [routerLink]="['admin']"><a>Admin</a></li>
+      <ul class="nav navbar-nav" [hidden]="!authenticated">
+        <li routerLinkActive="active" [routerLink]="['overview']"
+            [routerLinkActiveOptions]="{exact: true}">
+          <a>Übersicht</a>
+        </li>
+        <li routerLinkActive="active" [routerLink]="['order']">
+          <a>Bestellen</a>
+        </li>
+        <!--<li routerLinkActive="active" [routerLink]="['admin']"><a>Admin</a></li>-->
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <div class="nav navbar-nav navbar-right" *ngIf="authenticated">
+        <li><a (click)="signout()">Abmelden</a></li>
+      </div>
+      <ul class="nav navbar-nav navbar-right" *ngIf="!authenticated">
         <li class="dropdown" zedropdown>
           <a class="dropdown-toggle"
              role="button"
              aria-haspopup="true"
              aria-expanded="false">Anmelden<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a>Registrieren</a></li>
-            <li><a>Anmelden</a></li>
+            <li><a [routerLink]="['signup']">Registrieren</a></li>
+            <li><a [routerLink]="['signin']">Anmelden</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Abmelden</a></li>
+            <li><a (click)="signout()">Abmelden</a></li>
           </ul>
         </li>
       </ul>
