@@ -24,8 +24,17 @@ export class AuthService {
     firebase.auth().onAuthStateChanged(callback);
   }
 
+  getCurrentUserEmail() {
+    let email = '';
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+      email = currentUser.email;
+    }
+    return email;
+  }
+
   isAuthenticated() {
-    if (firebase.auth().currentUser) {
+    if (this.getCurrentUserEmail()) {
       return true;
     } else {
       return false;
