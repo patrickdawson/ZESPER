@@ -5,7 +5,7 @@
       <th *ngFor="let food of mealOfTheWeek">{{food.name}}</th>
       <th>Kosten</th>
     </tr>
-    <tr *ngFor="let order of orders" (click)="">
+    <tr class="orderrow" *ngFor="let order of orders" [routerLink]="[order.customer]">
       <td>{{order.customer}}</td>
       <td *ngFor="let food of order.foods">{{food.quantity}}</td>
       <td>{{order.totalCost | currency: "EUR"}}</td>

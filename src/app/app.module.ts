@@ -18,6 +18,7 @@ import { SignupComponent } from './header/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { SigninComponent } from './header/signin/signin.component';
 import { AuthGuard } from './shared/auth.guard';
+import { CurrentUserGuard } from './shared/currentUser.guard';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { AuthGuard } from './shared/auth.guard';
     MealService,
     OrderService,
     AuthService,
-    AuthGuard
+    AuthGuard,
+    CurrentUserGuard
   ],
   bootstrap: [AppComponent]
 })
