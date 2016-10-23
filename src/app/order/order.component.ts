@@ -51,10 +51,8 @@ export class OrderComponent implements OnInit {
 
     for (let i = 0; i < this.foods.length; ++i) {
       let quantity = this.orderForm.controls['foods'].value[i];
-      if (quantity > 0) {
-        this.foods[i].quantity = quantity;
-        this.order.addFood(this.foods[i]);
-      }
+      this.foods[i].quantity = quantity;
+      this.order.addFood(this.foods[i]);
     }
   }
 
@@ -62,10 +60,8 @@ export class OrderComponent implements OnInit {
     const userEmail = this.authService.getCurrentUserEmail();
 
     // Check if the user already has an existing order.
-    let currentOrder = this.orderService.getByCustomer(userEmail);
-    if (currentOrder) {
-      this.orderService.deleteOrder(currentOrder);
-    }
+    this.orderService.deleteOrder(userEmail);
+
     this.order.customer = userEmail;
     this.orderService.placeOrder(this.order);
 

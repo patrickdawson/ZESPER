@@ -14,11 +14,11 @@ import { MealService } from './services/meal.service';
 import { OrderService } from './services/order.service';
 import { OverviewListComponent } from './overview/overview-list/overview-list.component';
 import { OverviewDetailComponent } from './overview/overview-detail/overview-detail.component';
-import { OverviewListItemComponent } from './overview/overview-list/overview-list-item.component';
 import { SignupComponent } from './header/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { SigninComponent } from './header/signin/signin.component';
 import { AuthGuard } from './shared/auth.guard';
+import { CurrentUserGuard } from './shared/currentUser.guard';
 
 @NgModule({
   declarations: [
@@ -30,7 +30,6 @@ import { AuthGuard } from './shared/auth.guard';
     AdminComponent,
     OverviewListComponent,
     OverviewDetailComponent,
-    OverviewListItemComponent,
     SignupComponent,
     SigninComponent
   ],
@@ -45,7 +44,8 @@ import { AuthGuard } from './shared/auth.guard';
     MealService,
     OrderService,
     AuthService,
-    AuthGuard
+    AuthGuard,
+    CurrentUserGuard
   ],
   bootstrap: [AppComponent]
 })

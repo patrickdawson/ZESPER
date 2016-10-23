@@ -13,24 +13,14 @@ import { Router } from '@angular/router';
 })
 export class OverviewComponent implements OnInit, OnDestroy {
   private meal: Food;
-  private orders: Order[] = [];
-  private totalCost: number = 0;
   private authenticated: boolean = false;
-  private subscription;
-  constructor(private orderService: OrderService,
-              private mealService: MealService,
+  constructor(private mealService: MealService,
               private authService: AuthService,
               private router: Router) {
   }
 
   ngOnInit() {
     this.meal = this.mealService.getMealOfTheWeek()[0];
-
-    this.subscription = this.orderService.ordersChanged.subscribe((orders: Order[]) => {
-      this.orders = orders;
-      this.updateCost();
-    });
-    this.orderService.listenForOrders();
 
     this.authService.onAuthStateChanged((user) => {
       if (!user) {
@@ -42,14 +32,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateCost() {
-    this.totalCost = 0;
-    _.forOwn(this.orders, order => {
-      this.totalCost += order.totalCost;
-    });
-  }
-
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 }

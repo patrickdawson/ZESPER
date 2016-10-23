@@ -11,6 +11,7 @@ import { Order } from '../../shared/order';
 export class OverviewDetailComponent implements OnInit, OnDestroy {
   private subscription;
   private order: Order;
+  private customer: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -19,8 +20,9 @@ export class OverviewDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.route.params.subscribe((params: any) => {
-      const customer = params['customer'];
-      this.order = this.orderService.getByCustomer(customer);
+      this.customer = params['customer'];
+      this.order = this.orderService.getByCustomer(this.customer);
+      console.log(this.order.totalCost);
       if (!this.order) {
         this.router.navigate(['/overview']);
       }
@@ -32,7 +34,7 @@ export class OverviewDetailComponent implements OnInit, OnDestroy {
   }
 
   deleteOrder() {
-    this.orderService.deleteOrder(this.order);
+    this.orderService.deleteOrder(this.customer);
     this.router.navigate(['/overview']);
   }
 
