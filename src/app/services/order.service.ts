@@ -47,7 +47,7 @@ export class OrderService {
   }
 
   getByCustomer(customer: string) {
-    const result = _.find(this._ordersInDatabase, order => order.customer === customer);
+    const result = _.find(this._orders, order => order.customer === customer);
     if (!result) {
       console.error(`Order for customer ${customer} not found!`);
     }
@@ -55,8 +55,8 @@ export class OrderService {
     return result;
   }
 
-  deleteOrder(order: Order) {
-    let idToDelete = _.findKey(this._ordersInDatabase, item => (<Order>item).customer === order.customer);
+  deleteOrder(customer: string) {
+    let idToDelete = _.findKey(this._ordersInDatabase, item => (<Order>item).customer === customer);
 
     firebase.database().ref(`/orders/${idToDelete}`).remove();
   }
