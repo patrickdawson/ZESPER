@@ -15,7 +15,7 @@
         <li routerLinkActive="active" [routerLink]="['order']">
           <a>Bestellen</a>
         </li>
-        <!--<li routerLinkActive="active" [routerLink]="['admin']"><a>Admin</a></li>-->
+        <li routerLinkActive="active" [routerLink]="['admin']" *ngIf="authenticated && isAdmin"><a>Admin</a></li>
       </ul>
       <div class="nav navbar-nav navbar-right" *ngIf="authenticated">
         <li><a (click)="signout()">Abmelden</a></li>
@@ -29,8 +29,6 @@
           <ul class="dropdown-menu">
             <li><a [routerLink]="['signup']">Registrieren</a></li>
             <li><a [routerLink]="['signin']">Anmelden</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a (click)="signout()">Abmelden</a></li>
           </ul>
         </li>
       </ul>

@@ -20,8 +20,10 @@ export class AuthService {
     return firebase.auth().signOut();
   }
 
-  onAuthStateChanged(callback: (user)=>any) {
-    firebase.auth().onAuthStateChanged(callback);
+  onAuthStateChanged(callback: (user) => any) {
+    firebase.auth().onAuthStateChanged(user => {
+      callback(user);
+    });
   }
 
   getCurrentUserEmail() {
@@ -39,6 +41,18 @@ export class AuthService {
     } else {
       return false;
     }
+  }
+
+  isAdmin(user) {
+    return firebase.database().ref('admins').once('value').then(snapshot => {
+      let adminsObject = snapshot.val();
+
+      if (adminsObject.hasOwnProperty(user.uid)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 }
 

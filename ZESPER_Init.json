@@ -1,4 +1,9 @@
 {
+  "admins": {
+    "tKimwcKgcXeNxFCKRUKSzYK05Xp2": {
+      "email": "patrick.dawson79@gmail.com"
+    }
+  },
   "mealOfTheWeek" : "Leberkäse",
   "meals" : {
     "Weißwurst" : {
@@ -25,5 +30,5 @@
         "quantity" : 0
       }
     }
-  }  
+  }
 }
