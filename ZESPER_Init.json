@@ -1,0 +1,29 @@
+{
+  "mealOfTheWeek" : "Leberkäse",
+  "meals" : {
+    "Weißwurst" : {
+      "Brezel" : {
+        "price" : 0.65,
+        "quantity" : 1
+      },
+      "Weißwurst" : {
+        "price" : 0.55,
+        "quantity" : 1
+      }
+    },
+    "Leberkäse" : {
+      "Leberkäse" : {
+        "price" : 1.6,
+        "quantity" : 1
+      },
+      "Wasserwecken" : {
+        "price" : 0.8,
+        "quantity" : 1
+      },
+      "Normaler Wecken" : {
+        "price" : 0.4,
+        "quantity" : 0
+      }
+    }
+  }  
+}
