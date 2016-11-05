@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   private authenticated: boolean = false;
+  private isAdmin: boolean = false;
 
   constructor(private authService: AuthService,
               private router: Router) {
@@ -18,6 +19,10 @@ export class HeaderComponent implements OnInit {
     this.authService.onAuthStateChanged((user) => {
       if (user) {
         this.authenticated = true;
+        // Check if the user is an admin
+        this.authService.isAdmin(user).then(result => {
+          this.isAdmin = result;
+        });
       } else {
         this.authenticated = false;
       }

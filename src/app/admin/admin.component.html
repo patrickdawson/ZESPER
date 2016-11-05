@@ -1,3 +1,34 @@
-<p>
-  admin works!
-</p>
+<div class="row">
+  <div class="panel-group">
+    <div class="panel panel-danger">
+      <div class="panel-heading">Bestellungen</div>
+      <div class="panel-body">
+        <b>Löschen</b><br>
+        Löscht alle Bestellungen. Kann nicht rückgängig gemacht werden!
+        <span class="pull-right"><button class="btn btn-danger" (click)="deleteAllOrders()">Löschen</button></span>
+      </div>
+      <div class="panel-body">
+        <b>Vesper der Woche</b><br>
+        Wählt das Vesper der Woche aus. Bitte vor der Änderung alle Bestellungen löschen.
+        <span class="pull-right"><ze-meal-of-week-selector></ze-meal-of-week-selector></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" [style.background]="modalHeaderColor">
+        <button type="button" class="close" (click)="childModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">{{modalTitle}}</h4>
+      </div>
+      <div class="modal-body">
+        {{modalBody}}
+      </div>
+    </div>
+  </div>
+</div>
+

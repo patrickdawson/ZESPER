@@ -1,13 +1,18 @@
 {
+  "admins": {
+    "tKimwcKgcXeNxFCKRUKSzYK05Xp2": {
+      "email": "patrick.dawson79@gmail.com"
+    }
+  },
   "mealOfTheWeek" : "Leberkäse",
   "meals" : {
     "Weißwurst" : {
-      "Brezel" : {
-        "price" : 0.65,
-        "quantity" : 1
-      },
       "Weißwurst" : {
         "price" : 0.55,
+        "quantity" : 1
+      },
+      "Brezel" : {
+        "price" : 0.65,
         "quantity" : 1
       }
     },
@@ -25,5 +30,5 @@
         "quantity" : 0
       }
     }
-  }  
+  }
 }

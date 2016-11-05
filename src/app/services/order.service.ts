@@ -61,4 +61,8 @@ export class OrderService {
     firebase.database().ref(`/orders/${idToDelete}`).remove();
   }
 
+  deleteAllOrders() {
+    return firebase.database().ref('/orders').remove();
+  }
+
 }

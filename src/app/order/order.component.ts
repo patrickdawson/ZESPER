@@ -16,7 +16,7 @@ export class OrderComponent implements OnInit {
   orderForm: FormGroup;
   private foods: [Food];
   private order: Order;
-  private meal: Food;
+  private mealName: string;
 
   constructor(private mealService: MealService,
               private orderService: OrderService,
@@ -27,19 +27,25 @@ export class OrderComponent implements OnInit {
 
   ngOnInit() {
     this.order = new Order();
-    this.foods = this.mealService.getMealOfTheWeek();
-    this.meal = this.foods[0];
+    Promise.all([
+      this.mealService.getFoodsOfWeeklyMeal(),
+      this.mealService.getWeeklyMealName()
+    ])
+    .then(results => {
+      this.foods = results[0];
+      this.mealName = results[1];
+
+      for (let food of this.foods) {
+        (<FormArray>this.orderForm.controls['foods']).push(new FormControl(food.quantity, Validators.required));
+      }
+
+      this.updateOrder();
+    });
+
 
     this.orderForm = this.formBuilder.group({
       'foods': this.formBuilder.array([])
     });
-
-    for (let food of this.foods) {
-      (<FormArray>this.orderForm.controls['foods']).push(new FormControl(food.quantity, Validators.required));
-    }
-
-    this.updateOrder();
-
   }
 
   onOrderInputChange() {

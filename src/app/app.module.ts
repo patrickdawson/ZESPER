@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { ModalModule, DropdownModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -19,6 +20,7 @@ import { AuthService } from './services/auth.service';
 import { SigninComponent } from './header/signin/signin.component';
 import { AuthGuard } from './shared/auth.guard';
 import { CurrentUserGuard } from './shared/currentUser.guard';
+import { MealOfWeekSelectorComponent } from './admin/meal-of-week-selector/meal-of-week-selector.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { CurrentUserGuard } from './shared/currentUser.guard';
     OverviewListComponent,
     OverviewDetailComponent,
     SignupComponent,
-    SigninComponent
+    SigninComponent,
+    MealOfWeekSelectorComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +42,8 @@ import { CurrentUserGuard } from './shared/currentUser.guard';
     HttpModule,
     ReactiveFormsModule,
     Routing,
+    ModalModule,
+    DropdownModule
   ],
   providers: [
     MealService,
