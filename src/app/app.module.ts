@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { ModalModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -39,6 +40,7 @@ import { CurrentUserGuard } from './shared/currentUser.guard';
     HttpModule,
     ReactiveFormsModule,
     Routing,
+    ModalModule
   ],
   providers: [
     MealService,
