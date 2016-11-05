@@ -20,17 +20,21 @@ export class OverviewListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.mealOfTheWeek = this.mealService.getMealOfTheWeek();
-
-    this.subscription = this.orderService.ordersChanged.subscribe((orders: Order[]) => {
-      this.orders = orders;
-      this.updateSummary();
-    });
-    this.orderService.listenForOrders();
+    this.mealService.getFoodsOfWeeklyMeal()
+      .then(foods => {
+        this.mealOfTheWeek = foods;
+        this.subscription = this.orderService.ordersChanged.subscribe((orders: Order[]) => {
+          this.orders = orders;
+          this.updateSummary();
+        });
+        this.orderService.listenForOrders();
+      });
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   updateSummary() {
