@@ -3,7 +3,8 @@ import { Food } from './food';
 import { Serializeable } from './serializeable';
 
 export class Order extends Serializeable {
-  private _foods: Food[];
+  private _foods: Food[] = [];
+  private _additionalCost: number = 0;
 
   public customer: string;
 
@@ -16,7 +17,7 @@ export class Order extends Serializeable {
   }
 
   get totalCost() {
-    return _.sumBy(this.foods, function(food) { return food.cost; });
+    return this._additionalCost + _.sumBy(this.foods, function(food) { return food.cost; });
   }
 
   addFood(food: Food) {
@@ -29,6 +30,10 @@ export class Order extends Serializeable {
 
   removeAll() {
     this._foods = [];
+  }
+
+  setAdditionalCost(cost: number) {
+    this._additionalCost = cost;
   }
 
   import(data: Object): any {

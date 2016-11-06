@@ -1,9 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import 'rxjs/Rx';
-import { Http, Headers, Response } from '@angular/http';
-import { Order } from '../shared';
-import { AuthService } from './auth.service';
+import { Order, Food } from '../shared';
 
 declare var firebase;
 
@@ -14,8 +12,7 @@ export class OrderService {
 
   public ordersChanged = new EventEmitter<Order[]>();
 
-  constructor(private http: Http,
-              private authService: AuthService) {
+  constructor() {
   }
 
   getAllOrders() {
@@ -26,20 +23,50 @@ export class OrderService {
     // Get a key for a new Post.
     let newPostKey = firebase.database().ref().child('orders').push().key;
     let updateData = {};
-    updateData[`/orders/${newPostKey}`] = order;
+    updateData[`orders/personal/${newPostKey}`] = order;
 
     firebase.database().ref().update(updateData);
   }
 
-  listenForOrders() {
-    firebase.database().ref('/orders').off('value');
-    firebase.database().ref('/orders').on('value', (snapshot) => {
-      this._ordersInDatabase = snapshot.val();
-      this._orders = [];
+  placeCommonFoodOrder(food: Food) {
+    firebase.database().ref('orders/common').child(food.name).set(food);
+  }
 
+  getCommonFoods(): Promise<Food[]> {
+    return firebase.database().ref('orders/common').once('value').then(snapshot => {
+      const commonFoodsData = snapshot.val();
+      let foods: Food[] = [];
+      _.forOwn(commonFoodsData, foodData => {
+        const food = new Food();
+        food.import(foodData);
+        foods.push(food);
+      });
+      return foods;
+    });
+  }
+
+  listenForOrders() {
+    firebase.database().ref('orders').off('value');
+    firebase.database().ref('orders').on('value', (snapshot) => {
+      console.log('Orders changed');
+      const orders = snapshot.val();
+      this._ordersInDatabase = orders ? orders.personal : {};
+
+      const commonFoodsData = orders? orders.common : {};
+      const commonFoods: Food[] = [];
+      _.forOwn(commonFoodsData, commonFoodData => {
+        let commonFood = new Food();
+        commonFood.import(commonFoodData);
+        commonFoods.push(commonFood);
+      });
+      const commonCost = _.sumBy(commonFoods, 'cost');
+      const additionalCostPerCustomer = commonCost / Object.keys(this._ordersInDatabase).length;
+
+      this._orders = [];
       _.forOwn(this._ordersInDatabase, orderData => {
         let order = new Order();
         order.import(orderData);
+        order.setAdditionalCost(additionalCostPerCustomer);
         this._orders.push(order);
       });
       this.ordersChanged.emit(this._orders);
@@ -58,11 +85,11 @@ export class OrderService {
   deleteOrder(customer: string) {
     let idToDelete = _.findKey(this._ordersInDatabase, item => (<Order>item).customer === customer);
 
-    firebase.database().ref(`/orders/${idToDelete}`).remove();
+    firebase.database().ref(`orders/personal/${idToDelete}`).remove();
   }
 
   deleteAllOrders() {
-    return firebase.database().ref('/orders').remove();
+    return firebase.database().ref('orders').remove();
   }
 
 }

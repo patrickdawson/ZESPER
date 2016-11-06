@@ -21,6 +21,7 @@ import { SigninComponent } from './header/signin/signin.component';
 import { AuthGuard } from './shared/auth.guard';
 import { CurrentUserGuard } from './shared/currentUser.guard';
 import { MealOfWeekSelectorComponent } from './admin/meal-of-week-selector/meal-of-week-selector.component';
+import { MustardSelectionComponent } from './overview/mustard-selection/mustard-selection.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MealOfWeekSelectorComponent } from './admin/meal-of-week-selector/meal-
     OverviewDetailComponent,
     SignupComponent,
     SigninComponent,
-    MealOfWeekSelectorComponent
+    MealOfWeekSelectorComponent,
+    MustardSelectionComponent
   ],
   imports: [
     BrowserModule,

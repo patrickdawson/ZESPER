@@ -11,7 +11,7 @@ import { Food } from '../../shared/food';
 })
 export class OverviewListComponent implements OnInit, OnDestroy {
   private orders: Order[] = [];
-  private mealOfTheWeek: Food[] = [];
+  private foods: Food[] = [];
   private subscription;
   private totalCost = 0;
 
@@ -22,7 +22,7 @@ export class OverviewListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.mealService.getFoodsOfWeeklyMeal()
       .then(foods => {
-        this.mealOfTheWeek = foods;
+        this.foods = foods;
         this.subscription = this.orderService.ordersChanged.subscribe((orders: Order[]) => {
           this.orders = orders;
           this.updateSummary();
@@ -39,14 +39,14 @@ export class OverviewListComponent implements OnInit, OnDestroy {
 
   updateSummary() {
     this.totalCost = 0;
-    for (let food of this.mealOfTheWeek) {
+    for (let food of this.foods) {
       food.quantity = 0;
     }
 
     _.forOwn(this.orders, order => {
       this.totalCost += order.totalCost;
       _.forOwn(order.foods, (food, index) => {
-        this.mealOfTheWeek[index].quantity += food.quantity;
+        this.foods[index].quantity += food.quantity;
       });
     });
   }

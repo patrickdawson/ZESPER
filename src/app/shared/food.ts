@@ -1,9 +1,9 @@
 import { Serializeable } from './serializeable';
 
 export class Food extends Serializeable{
-  constructor(public name: string,
-              public price: number,
-              public quantity: number) {
+  constructor(public name: string = '',
+              public price: number = 0,
+              public quantity: number = 0) {
     super();
   }
 
