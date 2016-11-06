@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { Food } from '../shared/food';
 
 declare var firebase;
@@ -15,11 +16,10 @@ export class MealService {
         return snapshot.val() as string;
       })
       .then(mealOfTheWeek => {
-        return firebase.database().ref('meals').child(mealOfTheWeek).once('value').then(snapshot => {
-          const foodObjects = snapshot.val();
-          return Object.keys(foodObjects).map(itemName => {
-            const foodObject = foodObjects[itemName];
-            return new Food(itemName, foodObject.price, foodObject.quantity);
+        return firebase.database().ref('meals').child(mealOfTheWeek).child('personal').once('value').then(snapshot => {
+          const foodObjects = snapshot.val() as Food[];
+          return _.map(foodObjects, foodObject => {
+            return new Food(foodObject.name, foodObject.price, foodObject.quantity);
           });
         });
       });
