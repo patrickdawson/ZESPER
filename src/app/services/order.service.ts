@@ -28,20 +28,21 @@ export class OrderService {
     firebase.database().ref().update(updateData);
   }
 
-  placeCommonFoodOrder(food: Food) {
-    firebase.database().ref('orders/common').child(food.name).set(food);
+  placeMustardOrder(food: Food) {
+    firebase.database().ref('orders/mustard').set(food);
   }
 
-  getCommonFoods(): Promise<Food[]> {
-    return firebase.database().ref('orders/common').once('value').then(snapshot => {
-      const commonFoodsData = snapshot.val();
-      let foods: Food[] = [];
-      _.forOwn(commonFoodsData, foodData => {
-        const food = new Food();
-        food.import(foodData);
-        foods.push(food);
-      });
-      return foods;
+  getMustardOrder(): Promise<Food> {
+    return firebase.database().ref('orders/mustard').once('value').then(snapshot => {
+      const mustardData = snapshot.val();
+      if (mustardData) {
+        const mustard = new Food();
+        mustard.import(mustardData);
+        return mustard;
+      } else {
+        return null;
+      }
+
     });
   }
 
@@ -53,17 +54,14 @@ export class OrderService {
       if (orders && orders.personal) {
         this._ordersInDatabase = orders.personal;
       }
-      const orderCount =  Object.keys(this._ordersInDatabase).length;
+      const orderCount = Object.keys(this._ordersInDatabase).length;
       if (orderCount > 0) {
-        const commonFoodsData = orders? orders.common : {};
-        const commonFoods: Food[] = [];
-        _.forOwn(commonFoodsData, commonFoodData => {
-          let commonFood = new Food();
-          commonFood.import(commonFoodData);
-          commonFoods.push(commonFood);
-        });
-        const commonCost = _.sumBy(commonFoods, 'cost');
-        const additionalCostPerCustomer = commonCost / Object.keys(this._ordersInDatabase).length;
+        let additionalCostPerCustomer = 0;
+        if (orders && orders.mustard) {
+          let mustard = new Food();
+          mustard.import(orders.mustard);
+          additionalCostPerCustomer = mustard.cost / Object.keys(this._ordersInDatabase).length;
+        }
 
         this._orders = [];
         _.forOwn(this._ordersInDatabase, orderData => {

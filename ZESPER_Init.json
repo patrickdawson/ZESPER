@@ -10,6 +10,11 @@
   "mealOfTheWeek": "Leberkäse",
   "meals": {
     "Weißwurst": {
+      "mustard": {
+        "name": "Händlmeier süßer Senf",
+        "price": 1.2,
+        "quantity": 0
+      },
       "personal": [
         {
           "name": "Weißwurst (Stück)",
@@ -24,6 +29,11 @@
       ]
     },
     "Leberkäse": {
+      "mustard": {
+        "name": "Kühne Senf",
+        "price": 1.5,
+        "quantity": 0
+      },
       "personal": [
         {
           "name": "Leberkäse",

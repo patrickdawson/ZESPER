@@ -14,7 +14,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class OrderComponent implements OnInit {
   orderForm: FormGroup;
-  private foods: [Food];
+  private foods: Food[];
   private order: Order;
   private mealName: string;
 

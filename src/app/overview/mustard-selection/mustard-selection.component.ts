@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Food } from '../../shared/food';
+import { MealService } from '../../services/meal.service';
 
 @Component({
   selector: 'ze-mustard-selection',
@@ -8,27 +9,32 @@ import { Food } from '../../shared/food';
   styleUrls: ['./mustard-selection.component.css']
 })
 export class MustardSelectionComponent implements OnInit {
-  private name = "Senf";
-  private currentMustardCount = 1;
+  private mustard: Food;
 
-  constructor(private orderService: OrderService) { }
+  constructor(private mealService: MealService,
+              private orderService: OrderService) {
+    this.mustard = new Food('Default Senf');
+  }
 
   ngOnInit() {
-    this.orderService.getCommonFoods().then(foods => {
-      let mustardFood = _.find(foods, {name: 'Senf'}) as Food;
-      if (mustardFood) {
-        this.currentMustardCount = mustardFood.quantity;
-      }
-    });
+    this.mealService.getMustardType()
+      .then(mustard => {
+        this.mustard = mustard;
+        this.orderService.getMustardOrder()
+          .then(mustard => {
+            if (mustard) {
+              this.mustard.quantity = mustard.quantity;
+            }
+          });
+      });
   }
 
   orderMustard() {
-    const mustard = new Food("Senf", 1.5, this.currentMustardCount);
-    this.orderService.placeCommonFoodOrder(mustard);
+    this.orderService.placeMustardOrder(this.mustard);
   }
 
   mustardCountChange(count: number) {
-    this.currentMustardCount = count;
+    this.mustard.quantity = count;
   }
 
 }

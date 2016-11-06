@@ -1,5 +1,5 @@
 <div class="panel panel-default col-md-6">
-  Anzahl {{name}}:
-  <input #mustardCount type="number" min="0" max="5" value="{{currentMustardCount}}" (change)="mustardCountChange(mustardCount.value)">
+  Anzahl "{{mustard.name}}":
+  <input #mustardCount type="number" min="0" max="5" value="{{mustard.quantity}}" (change)="mustardCountChange(mustardCount.value)">
   <button class="btn" (click)="orderMustard()">Save</button>
 </div>

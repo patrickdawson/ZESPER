@@ -10,17 +10,27 @@ export class MealService {
   constructor() {
   }
 
-  getFoodsOfWeeklyMeal(): Promise<[Food]> {
-    return firebase.database().ref('mealOfTheWeek').once('value')
-      .then(snapshot => {
-        return snapshot.val() as string;
-      })
+  getFoodsOfWeeklyMeal(): Promise<Food[]> {
+    return this.getWeeklyMealName()
       .then(mealOfTheWeek => {
         return firebase.database().ref('meals').child(mealOfTheWeek).child('personal').once('value').then(snapshot => {
-          const foodObjects = snapshot.val() as Food[];
-          return _.map(foodObjects, foodObject => {
-            return new Food(foodObject.name, foodObject.price, foodObject.quantity);
+          const foodObjectsData = snapshot.val();
+          return _.map(foodObjectsData, foodData => {
+            let food = new Food();
+            food.import(foodData);
+            return food;
           });
+        });
+      });
+  }
+
+  getMustardType(): Promise<Food> {
+    return this.getWeeklyMealName()
+      .then(mealOfTheWeek => {
+        return firebase.database().ref('meals').child(mealOfTheWeek).child('mustard').once('value').then(snapshot => {
+          let food = new Food();
+          food.import(snapshot.val());
+          return food;
         });
       });
   }
