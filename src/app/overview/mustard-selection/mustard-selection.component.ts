@@ -16,7 +16,9 @@ export class MustardSelectionComponent implements OnInit {
   ngOnInit() {
     this.orderService.getCommonFoods().then(foods => {
       let mustardFood = _.find(foods, {name: 'Senf'}) as Food;
-      this.currentMustardCount = mustardFood.quantity;
+      if (mustardFood) {
+        this.currentMustardCount = mustardFood.quantity;
+      }
     });
   }
 

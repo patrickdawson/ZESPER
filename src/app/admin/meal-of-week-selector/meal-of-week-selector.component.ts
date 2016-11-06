@@ -28,8 +28,6 @@ export class MealOfWeekSelectorComponent implements OnInit {
         this.items = [];
         this.items.push.apply(this.items, Object.keys(results[0]));
         this.mealOfTheWeek = results[1];
-        console.log(this.mealOfTheWeek);
-        console.log(JSON.stringify(this.items));
       });
   }
 

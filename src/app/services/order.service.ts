@@ -48,28 +48,32 @@ export class OrderService {
   listenForOrders() {
     firebase.database().ref('orders').off('value');
     firebase.database().ref('orders').on('value', (snapshot) => {
-      console.log('Orders changed');
       const orders = snapshot.val();
-      this._ordersInDatabase = orders ? orders.personal : {};
+      this._ordersInDatabase = [];
+      if (orders && orders.personal) {
+        this._ordersInDatabase = orders.personal;
+      }
+      const orderCount =  Object.keys(this._ordersInDatabase).length;
+      if (orderCount > 0) {
+        const commonFoodsData = orders? orders.common : {};
+        const commonFoods: Food[] = [];
+        _.forOwn(commonFoodsData, commonFoodData => {
+          let commonFood = new Food();
+          commonFood.import(commonFoodData);
+          commonFoods.push(commonFood);
+        });
+        const commonCost = _.sumBy(commonFoods, 'cost');
+        const additionalCostPerCustomer = commonCost / Object.keys(this._ordersInDatabase).length;
 
-      const commonFoodsData = orders? orders.common : {};
-      const commonFoods: Food[] = [];
-      _.forOwn(commonFoodsData, commonFoodData => {
-        let commonFood = new Food();
-        commonFood.import(commonFoodData);
-        commonFoods.push(commonFood);
-      });
-      const commonCost = _.sumBy(commonFoods, 'cost');
-      const additionalCostPerCustomer = commonCost / Object.keys(this._ordersInDatabase).length;
-
-      this._orders = [];
-      _.forOwn(this._ordersInDatabase, orderData => {
-        let order = new Order();
-        order.import(orderData);
-        order.setAdditionalCost(additionalCostPerCustomer);
-        this._orders.push(order);
-      });
-      this.ordersChanged.emit(this._orders);
+        this._orders = [];
+        _.forOwn(this._ordersInDatabase, orderData => {
+          let order = new Order();
+          order.import(orderData);
+          order.setAdditionalCost(additionalCostPerCustomer);
+          this._orders.push(order);
+        });
+        this.ordersChanged.emit(this._orders);
+      }
     });
   }
 

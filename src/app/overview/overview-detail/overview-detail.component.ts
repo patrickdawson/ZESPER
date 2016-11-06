@@ -22,7 +22,7 @@ export class OverviewDetailComponent implements OnInit, OnDestroy {
     this.subscription = this.route.params.subscribe((params: any) => {
       this.customer = params['customer'];
       this.order = this.orderService.getByCustomer(this.customer);
-      console.log(this.order.totalCost);
+
       if (!this.order) {
         this.router.navigate(['/overview']);
       }
