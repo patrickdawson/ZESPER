@@ -11,8 +11,12 @@ export class OrderService {
   private _orders: Order[] = [];
 
   public ordersChanged = new EventEmitter<Order[]>();
+  public orderStateChanged = new EventEmitter<boolean>();
 
   constructor() {
+    firebase.database().ref('areOrdersAllowed').on('value', snapshot => {
+      this.orderStateChanged.emit(snapshot.val());
+    });
   }
 
   getAllOrders() {

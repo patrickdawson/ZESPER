@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { OrderService } from '../services/order.service';
@@ -8,10 +8,11 @@ import { OrderService } from '../services/order.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   private authenticated: boolean = false;
   private isAdmin: boolean = false;
   private areOrdersAllowed = false;
+  private subscription;
 
   constructor(private authService: AuthService,
               private orderService: OrderService,
@@ -31,7 +32,11 @@ export class HeaderComponent implements OnInit {
       }
     });
 
-    this.orderService.areOrdersAllowed().then(isAllowed => this.areOrdersAllowed = isAllowed);
+    this.subscription = this.orderService.orderStateChanged.subscribe(state => this.areOrdersAllowed = state);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   signout() {
