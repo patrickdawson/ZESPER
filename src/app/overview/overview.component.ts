@@ -14,8 +14,11 @@ import { Router } from '@angular/router';
 export class OverviewComponent implements OnInit, OnDestroy {
   private mealName: string;
   private authenticated: boolean = false;
+  private areOrdersAllowed: boolean = false;
+
   constructor(private mealService: MealService,
               private authService: AuthService,
+              private orderService: OrderService,
               private router: Router) {
   }
 
@@ -30,6 +33,8 @@ export class OverviewComponent implements OnInit, OnDestroy {
           .then(mealName => this.mealName = mealName);
       }
     });
+
+    this.orderService.areOrdersAllowed().then(allowed => this.areOrdersAllowed = allowed);
   }
 
   ngOnDestroy(): void {

@@ -94,4 +94,10 @@ export class OrderService {
     return firebase.database().ref('orders').remove();
   }
 
+  areOrdersAllowed() {
+    return firebase.database().ref('areOrdersAllowed').once('value').then(snapshot => {
+      return snapshot.val();
+    });
+  }
+
 }

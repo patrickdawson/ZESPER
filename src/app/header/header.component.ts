@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { OrderService } from '../services/order.service';
 
 @Component({
   selector: 'ze-header',
@@ -10,8 +11,10 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   private authenticated: boolean = false;
   private isAdmin: boolean = false;
+  private areOrdersAllowed = false;
 
   constructor(private authService: AuthService,
+              private orderService: OrderService,
               private router: Router) {
   }
 
@@ -27,6 +30,8 @@ export class HeaderComponent implements OnInit {
         this.authenticated = false;
       }
     });
+
+    this.orderService.areOrdersAllowed().then(isAllowed => this.areOrdersAllowed = isAllowed);
   }
 
   signout() {
