@@ -100,4 +100,9 @@ export class OrderService {
     });
   }
 
+  allowOrders(val: boolean) {
+    console.log(`Setting allowOrders to: ${val}`);
+    firebase.database().ref('areOrdersAllowed').set(val);
+  }
+
 }
