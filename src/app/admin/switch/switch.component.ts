@@ -12,7 +12,7 @@ export class SwitchComponent implements OnInit {
   constructor(private orderService: OrderService) { }
 
   ngOnInit() {
-    this.orderService.areOrdersAllowed().then(allowed => this.isActive = allowed);
+    this.isActive = this.orderService.areOrdersAllowed();
   }
 
   onSwitchChange(val) {

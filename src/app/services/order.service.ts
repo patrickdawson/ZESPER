@@ -1,7 +1,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import 'rxjs/Rx';
-import { Order, Food } from '../shared';
+import { Order } from '../shared/order';
+import { Food } from '../shared/food';
+
 
 declare var firebase;
 
@@ -9,13 +11,15 @@ declare var firebase;
 export class OrderService {
   private _ordersInDatabase = [];
   private _orders: Order[] = [];
+  private _ordersAllowed = false;
 
   public ordersChanged = new EventEmitter<Order[]>();
   public orderStateChanged = new EventEmitter<boolean>();
 
   constructor() {
     firebase.database().ref('areOrdersAllowed').on('value', snapshot => {
-      this.orderStateChanged.emit(snapshot.val());
+      this._ordersAllowed = snapshot.val();
+      this.orderStateChanged.emit(this._ordersAllowed);
     });
   }
 
@@ -98,10 +102,8 @@ export class OrderService {
     return firebase.database().ref('orders').remove();
   }
 
-  areOrdersAllowed() {
-    return firebase.database().ref('areOrdersAllowed').once('value').then(snapshot => {
-      return snapshot.val();
-    });
+  areOrdersAllowed(): boolean {
+    return this._ordersAllowed;
   }
 
   allowOrders(val: boolean) {

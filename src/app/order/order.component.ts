@@ -26,26 +26,37 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.order = new Order();
-    Promise.all([
-      this.mealService.getFoodsOfWeeklyMeal(),
-      this.mealService.getWeeklyMealName()
-    ])
-    .then(results => {
-      this.foods = results[0];
-      this.mealName = results[1];
-
-      for (let food of this.foods) {
-        (<FormArray>this.orderForm.controls['foods']).push(new FormControl(food.quantity, Validators.required));
-      }
-
-      this.updateOrder();
-    });
-
-
     this.orderForm = this.formBuilder.group({
       'foods': this.formBuilder.array([])
     });
+
+
+    // new order
+    this.order = new Order();
+
+    Promise.all([
+      this.mealService.getWeeklyMealName(),
+      this.mealService.getFoodsOfWeeklyMeal()
+    ])
+      .then(results => {
+        this.mealName = results[0];
+
+        let order = this.orderService.getByCustomer(this.authService.getCurrentUserEmail());
+        if (order) {
+          this.order = order;
+          this.foods = order.foods;
+        } else {
+          this.order = new Order();
+          this.foods = results[1];
+        }
+
+        for (let food of this.foods) {
+          (<FormArray>this.orderForm.controls['foods']).push(new FormControl(food.quantity, Validators.required));
+        }
+
+        this.updateOrder();
+      });
+
   }
 
   onOrderInputChange() {

@@ -34,7 +34,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.orderService.areOrdersAllowed().then(allowed => this.areOrdersAllowed = allowed);
+    this.areOrdersAllowed = this.orderService.areOrdersAllowed();
   }
 
   ngOnDestroy(): void {

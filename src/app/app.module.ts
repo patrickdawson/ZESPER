@@ -18,11 +18,11 @@ import { OverviewDetailComponent } from './overview/overview-detail/overview-det
 import { SignupComponent } from './header/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { SigninComponent } from './header/signin/signin.component';
-import { AuthGuard } from './shared/auth.guard';
-import { CurrentUserGuard } from './shared/currentUser.guard';
+import { AuthGuard, CurrentUserGuard, OrderGuard } from './shared';
 import { MealOfWeekSelectorComponent } from './admin/meal-of-week-selector/meal-of-week-selector.component';
 import { MustardSelectionComponent } from './overview/mustard-selection/mustard-selection.component';
 import { SwitchComponent } from './admin/switch/switch.component';
+import { ClosedBannerComponent } from './closed-banner/closed-banner.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,8 @@ import { SwitchComponent } from './admin/switch/switch.component';
     SigninComponent,
     MealOfWeekSelectorComponent,
     MustardSelectionComponent,
-    SwitchComponent
+    SwitchComponent,
+    ClosedBannerComponent
   ],
   imports: [
     BrowserModule,
@@ -50,11 +51,12 @@ import { SwitchComponent } from './admin/switch/switch.component';
     DropdownModule
   ],
   providers: [
+    AuthService,
     MealService,
     OrderService,
-    AuthService,
     AuthGuard,
-    CurrentUserGuard
+    CurrentUserGuard,
+    OrderGuard
   ],
   bootstrap: [AppComponent]
 })

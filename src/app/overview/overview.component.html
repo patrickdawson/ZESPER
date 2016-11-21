@@ -1,21 +1,17 @@
-<div *ngIf="authenticated && !areOrdersAllowed" class="jumbotron">
-  <h2 align="center">Aktuell keine Bestellungen möglich!</h2>
+<div class="row">
+  <h2>
+    Diese Woche gibt es: <b>{{mealName}}</b>
+  </h2>
 </div>
-<div *ngIf="authenticated && areOrdersAllowed">
-  <div class="row">
-    <h2>
-      Diese Woche gibt es: <b>{{mealName}}</b>
-    </h2>
+<div class="row">
+  <div class="col-md-6">
+    <ze-overview-list></ze-overview-list>
   </div>
-  <div class="row">
-    <div class="col-md-6">
-      <ze-overview-list></ze-overview-list>
-    </div>
-    <div class="col-md-6">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-  <div class="row">
-      <ze-mustard-selection></ze-mustard-selection>
+  <div class="col-md-6">
+    <router-outlet></router-outlet>
   </div>
 </div>
+<div class="row">
+    <ze-mustard-selection></ze-mustard-selection>
+</div>
+
