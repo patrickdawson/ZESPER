@@ -47,7 +47,7 @@ export class AuthService {
     return firebase.database().ref('admins').once('value').then(snapshot => {
       let adminsObject = snapshot.val();
 
-      if (adminsObject.hasOwnProperty(user.uid)) {
+      if (adminsObject && adminsObject.hasOwnProperty(user.uid)) {
         return true;
       } else {
         return false;
