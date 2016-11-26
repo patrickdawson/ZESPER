@@ -12,14 +12,8 @@ declare var firebase;
 export class OrderService {
   private _ordersInDatabase = [];
   private _orders: Order[] = [];
-  private _ordersAllowed = false;
-
-  public ordersChanged = new EventEmitter<Order[]>();
 
   constructor() {
-    firebase.database().ref('areOrdersAllowed').on('value', snapshot => {
-      this._ordersAllowed = snapshot.val();
-    });
   }
 
   getAllOrders() {
@@ -53,8 +47,41 @@ export class OrderService {
     });
   }
 
-  listenForOrders() {
-    firebase.database().ref('orders').off('value');
+  getOrders(): Observable<Order[]> {
+    return Observable.create(observer => {
+      let dbRef = firebase.database().ref('orders');
+      let changeHandler = snapshot => {
+        const ordersVal = snapshot.val();
+        if (ordersVal && ordersVal.personal) {
+          let ordersData = ordersVal.personal;
+          const ordersCount = Object.keys(ordersData).length;
+          if (ordersCount > 0) {
+            let additionalCostPerCustomer = 0;
+            if (ordersData && ordersData.mustard) {
+              let mustard = new Food();
+              mustard.import(ordersData.mustard);
+              additionalCostPerCustomer = mustard.cost / Object.keys(this._ordersInDatabase).length;
+            }
+            let orders: Order[] = [];
+            _.forOwn(ordersData, orderData => {
+              let order = new Order();
+              order.import(orderData);
+              order.setAdditionalCost(additionalCostPerCustomer);
+              orders.push(order);
+            });
+            observer.next(orders);
+          }
+        }
+      };
+
+      dbRef.on('value', changeHandler);
+
+      return () => {
+        dbRef.off('value', changeHandler);
+      };
+    });
+
+    /*firebase.database().ref('orders').off('value');
     firebase.database().ref('orders').on('value', (snapshot) => {
       const orders = snapshot.val();
       this._ordersInDatabase = [];
@@ -79,7 +106,7 @@ export class OrderService {
         });
         this.ordersChanged.emit(this._orders);
       }
-    });
+    });*/
   }
 
   getByCustomer(customer: string) {

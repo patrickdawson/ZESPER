@@ -25,11 +25,10 @@ export class OverviewListComponent implements OnInit, OnDestroy {
       .then(foods => {
         this.foods = foods;
         this.updateSummary();
-        this.subscription = this.orderService.ordersChanged.subscribe((orders: Order[]) => {
+        this.subscription = this.orderService.getOrders().subscribe((orders: Order[]) => {
           this.orders = orders;
           this.updateSummary();
         });
-        this.orderService.listenForOrders();
       });
   }
 
