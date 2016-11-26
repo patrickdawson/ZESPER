@@ -12,11 +12,10 @@ export class OrderGuard implements CanActivate {
   constructor(private router: Router, private orderService: OrderService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-    if (this.orderService.areOrdersAllowed()) {
-      return true;
-    } else {
-      this.router.navigate(['closed']);
-      return false;
-    }
+    return this.orderService.canOrder(true).do(canOrder => {
+      if (!canOrder) {
+        this.router.navigate(['closed']);
+      }
+    });
   }
 }

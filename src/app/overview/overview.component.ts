@@ -5,6 +5,7 @@ import { MealService } from '../services/meal.service';
 import { Order, Food } from '../shared';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ze-overview',
@@ -15,6 +16,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
   private mealName: string;
   private authenticated: boolean = false;
   private areOrdersAllowed: boolean = false;
+  private subscription: Subscription;
 
   constructor(private mealService: MealService,
               private authService: AuthService,
@@ -34,9 +36,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.areOrdersAllowed = this.orderService.areOrdersAllowed();
+    this.subscription = this.orderService.canOrder().subscribe(canOrder => this.areOrdersAllowed = canOrder);
   }
 
   ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

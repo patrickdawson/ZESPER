@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subscription = this.orderService.orderStateChanged.subscribe(state => this.areOrdersAllowed = state);
+    this.subscription = this.orderService.canOrder().subscribe(state => this.areOrdersAllowed = state);
   }
 
   ngOnDestroy(): void {

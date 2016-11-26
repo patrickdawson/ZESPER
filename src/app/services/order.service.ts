@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import 'rxjs/Rx';
 import { Order } from '../shared/order';
 import { Food } from '../shared/food';
+import { Observable } from 'rxjs';
 
 
 declare var firebase;
@@ -14,12 +15,10 @@ export class OrderService {
   private _ordersAllowed = false;
 
   public ordersChanged = new EventEmitter<Order[]>();
-  public orderStateChanged = new EventEmitter<boolean>();
 
   constructor() {
     firebase.database().ref('areOrdersAllowed').on('value', snapshot => {
       this._ordersAllowed = snapshot.val();
-      this.orderStateChanged.emit(this._ordersAllowed);
     });
   }
 
@@ -102,8 +101,29 @@ export class OrderService {
     return firebase.database().ref('orders').remove();
   }
 
-  areOrdersAllowed(): boolean {
-    return this._ordersAllowed;
+  canOrder(once = false): Observable<boolean> {
+    return Observable.create(observer => {
+      let areOrdersAllowedRef = firebase.database().ref('areOrdersAllowed');
+      let valueChangedHandler = snapshot => {
+        observer.next(snapshot.val());
+      };
+      if (once) {
+        areOrdersAllowedRef.once('value').then(snapshot => {
+          observer.next(snapshot.val());
+          observer.complete();
+        });
+      } else {
+        areOrdersAllowedRef.on('value', valueChangedHandler);
+      }
+
+      return () => {
+        if (!once) {
+          console.log('Calling of on firebase ref.');
+          areOrdersAllowedRef.off('value', valueChangedHandler);
+        }
+      };
+
+    });
   }
 
   allowOrders(val: boolean) {
