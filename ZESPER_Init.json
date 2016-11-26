@@ -1,10 +1,7 @@
 {
   "admins": {
-    "tKimwcKgcXeNxFCKRUKSzYK05Xp2": {
-      "email": "patrick.dawson79@gmail.com"
-    },
-    "eMNX18ZbZygBaTx3pmzGXVsRqww1": {
-      "email": "markus.voelk@outlook.de"
+    "abc": {
+      "email": "abc@abc.de"
     }
   },
   "mealOfTheWeek": "Leberkäse",
@@ -53,5 +50,5 @@
       ]
     }
   },
-  "areOrdersAllowed": true
+  "areOrdersAllowed": false
 }
