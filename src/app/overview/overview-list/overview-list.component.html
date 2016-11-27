@@ -12,7 +12,7 @@
         <td *ngFor="let food of order.foods">{{food.quantity}}</td>
         <td>{{order.totalCost | currency: "EUR"}}</td>
       </tr>
-      <tr>
+      <tr class="info">
         <td><b>SUMME</b></td>
         <td *ngFor="let food of foods">{{food.quantity}}</td>
         <td>{{totalCost | currency: "EUR"}}</td>
