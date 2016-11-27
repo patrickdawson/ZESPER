@@ -47,17 +47,17 @@ export class OrderService {
       let changeHandler = snapshot => {
         const ordersVal = snapshot.val();
         if (ordersVal && ordersVal.personal) {
-          let ordersData = ordersVal.personal;
-          const ordersCount = Object.keys(ordersData).length;
+          let personalOrdersData = ordersVal.personal;
+          const ordersCount = Object.keys(personalOrdersData).length;
           if (ordersCount > 0) {
             let additionalCostPerCustomer = 0;
-            if (ordersData && ordersData.mustard) {
+            if (ordersVal && ordersVal.mustard) {
               let mustard = new Food();
-              mustard.import(ordersData.mustard);
-              additionalCostPerCustomer = mustard.cost / Object.keys(ordersData).length;
+              mustard.import(ordersVal.mustard);
+              additionalCostPerCustomer = mustard.cost / ordersCount;
             }
             let orders: Order[] = [];
-            _.forOwn(ordersData, orderData => {
+            _.forOwn(personalOrdersData, orderData => {
               let order = new Order();
               order.import(orderData);
               order.setAdditionalCost(additionalCostPerCustomer);
