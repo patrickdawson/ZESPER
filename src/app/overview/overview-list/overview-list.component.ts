@@ -14,6 +14,7 @@ export class OverviewListComponent implements OnInit, OnDestroy {
   private foods: Food[] = [];
   private subscription;
   private totalCost = 0;
+  private hasReceivedData = false;
 
   constructor(private orderService: OrderService,
               private mealService: MealService) {
@@ -25,11 +26,11 @@ export class OverviewListComponent implements OnInit, OnDestroy {
       .then(foods => {
         this.foods = foods;
         this.updateSummary();
-        this.subscription = this.orderService.ordersChanged.subscribe((orders: Order[]) => {
+        this.subscription = this.orderService.getOrders().subscribe((orders: Order[]) => {
+          this.hasReceivedData = true;
           this.orders = orders;
           this.updateSummary();
         });
-        this.orderService.listenForOrders();
       });
   }
 

@@ -10,20 +10,7 @@ declare var firebase;
 
 @Injectable()
 export class OrderService {
-  private _ordersInDatabase = [];
-  private _orders: Order[] = [];
-  private _ordersAllowed = false;
-
-  public ordersChanged = new EventEmitter<Order[]>();
-
   constructor() {
-    firebase.database().ref('areOrdersAllowed').on('value', snapshot => {
-      this._ordersAllowed = snapshot.val();
-    });
-  }
-
-  getAllOrders() {
-    return this._orders;
   }
 
   placeOrder(order: Order) {
@@ -53,48 +40,64 @@ export class OrderService {
     });
   }
 
-  listenForOrders() {
-    firebase.database().ref('orders').off('value');
-    firebase.database().ref('orders').on('value', (snapshot) => {
-      const orders = snapshot.val();
-      this._ordersInDatabase = [];
-      if (orders && orders.personal) {
-        this._ordersInDatabase = orders.personal;
-      }
-      const orderCount = Object.keys(this._ordersInDatabase).length;
-      if (orderCount > 0) {
-        let additionalCostPerCustomer = 0;
-        if (orders && orders.mustard) {
-          let mustard = new Food();
-          mustard.import(orders.mustard);
-          additionalCostPerCustomer = mustard.cost / Object.keys(this._ordersInDatabase).length;
-        }
+  getOrders(): Observable<Order[]> {
+    return Observable.create(observer => {
+      let dbRef = firebase.database().ref('orders');
 
-        this._orders = [];
-        _.forOwn(this._ordersInDatabase, orderData => {
-          let order = new Order();
-          order.import(orderData);
-          order.setAdditionalCost(additionalCostPerCustomer);
-          this._orders.push(order);
-        });
-        this.ordersChanged.emit(this._orders);
-      }
+      let changeHandler = snapshot => {
+        const ordersVal = snapshot.val();
+        if (ordersVal && ordersVal.personal) {
+          let personalOrdersData = ordersVal.personal;
+          const ordersCount = Object.keys(personalOrdersData).length;
+          if (ordersCount > 0) {
+            let additionalCostPerCustomer = 0;
+            if (ordersVal && ordersVal.mustard) {
+              let mustard = new Food();
+              mustard.import(ordersVal.mustard);
+              additionalCostPerCustomer = mustard.cost / ordersCount;
+            }
+            let orders: Order[] = [];
+            _.forOwn(personalOrdersData, orderData => {
+              let order = new Order();
+              order.import(orderData);
+              order.setAdditionalCost(additionalCostPerCustomer);
+              orders.push(order);
+            });
+            observer.next(orders);
+          }
+        }
+      };
+
+      dbRef.on('value', changeHandler);
+
+      return () => {
+        console.log('Removing getOrders subscription');
+        dbRef.off('value', changeHandler);
+      };
     });
   }
 
   getByCustomer(customer: string) {
-    const result = _.find(this._orders, order => order.customer === customer);
-    if (!result) {
-      console.error(`Order for customer ${customer} not found!`);
-    }
+    return firebase.database().ref('orders/personal').once('value').then(snapshot => {
+      const orders = <{customer: String}[]>(snapshot.val());
+      const result = _.find(orders, order => order.customer === customer);
+      if (!result) {
+        console.error(`Order for customer ${customer} not found!`);
+      }
 
-    return result;
+      const order = new Order();
+      order.import(result);
+
+      return order;
+    });
   }
 
   deleteOrder(customer: string) {
-    let idToDelete = _.findKey(this._ordersInDatabase, item => (<Order>item).customer === customer);
-
-    firebase.database().ref(`orders/personal/${idToDelete}`).remove();
+    return firebase.database().ref('orders/personal').once('value').then(snapshot => {
+      const orders = <{customer: String}[]>(snapshot.val());
+      let idToDelete = _.findKey(orders, item => (<Order>item).customer === customer);
+      firebase.database().ref(`orders/personal/${idToDelete}`).remove();
+    });
   }
 
   deleteAllOrders() {
@@ -118,7 +121,6 @@ export class OrderService {
 
       return () => {
         if (!once) {
-          console.log('Calling of on firebase ref.');
           areOrdersAllowedRef.off('value', valueChangedHandler);
         }
       };

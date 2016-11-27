@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { MealService } from '../services/meal.service';
 import { OrderService } from '../services/order.service';
@@ -6,17 +6,19 @@ import { Order } from '../shared';
 import { Router } from '@angular/router';
 import { Food } from '../shared/food';
 import { AuthService } from '../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ze-order',
   templateUrl: './order.component.html',
   styles: []
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
   orderForm: FormGroup;
   private foods: Food[];
   private order: Order;
   private mealName: string;
+  private orderSubscription: Subscription;
 
   constructor(private mealService: MealService,
               private orderService: OrderService,
@@ -36,27 +38,38 @@ export class OrderComponent implements OnInit {
 
     Promise.all([
       this.mealService.getWeeklyMealName(),
-      this.mealService.getFoodsOfWeeklyMeal()
-    ])
+      this.mealService.getFoodsOfWeeklyMeal()])
       .then(results => {
         this.mealName = results[0];
-
-        let order = this.orderService.getByCustomer(this.authService.getCurrentUserEmail());
-        if (order) {
-          this.order = order;
-          this.foods = order.foods;
-        } else {
-          this.order = new Order();
-          this.foods = results[1];
-        }
+        this.foods = results[1];
 
         for (let food of this.foods) {
           (<FormArray>this.orderForm.controls['foods']).push(new FormControl(food.quantity, Validators.required));
         }
-
         this.updateOrder();
-      });
 
+        this.orderSubscription = this.orderService.getOrders().first().subscribe(orders => {
+          const customer = this.authService.getCurrentUserEmail();
+          const order = _.find(orders, item => item.customer === customer);
+          if (order) {
+            this.order = order;
+            this.foods = order.foods;
+            for (let i = 0; i < this.foods.length; ++i) {
+              (<FormArray>this.orderForm.controls['foods']).controls[i].setValue(this.foods[i].quantity);
+            }
+          } else {
+            this.order = new Order();
+          }
+
+          this.updateOrder();
+        });
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.orderSubscription) {
+      this.orderSubscription.unsubscribe();
+    }
   }
 
   onOrderInputChange() {
@@ -77,11 +90,11 @@ export class OrderComponent implements OnInit {
     const userEmail = this.authService.getCurrentUserEmail();
 
     // Check if the user already has an existing order.
-    this.orderService.deleteOrder(userEmail);
+    this.orderService.deleteOrder(userEmail).then(() => {
+      this.order.customer = userEmail;
+      this.orderService.placeOrder(this.order);
 
-    this.order.customer = userEmail;
-    this.orderService.placeOrder(this.order);
-
-    this.router.navigate(['/']);
+      this.router.navigate(['/']);
+    });
   }
 }
