@@ -14,7 +14,6 @@ import { AdminComponent } from './admin/admin.component';
 import { MealService } from './services/meal.service';
 import { OrderService } from './services/order.service';
 import { OverviewListComponent } from './overview/overview-list/overview-list.component';
-import { OverviewDetailComponent } from './overview/overview-detail/overview-detail.component';
 import { SignupComponent } from './header/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { SigninComponent } from './header/signin/signin.component';
@@ -34,7 +33,6 @@ import { FooterComponent } from './footer/footer.component';
     OrderComponent,
     AdminComponent,
     OverviewListComponent,
-    OverviewDetailComponent,
     SignupComponent,
     SigninComponent,
     MealOfWeekSelectorComponent,

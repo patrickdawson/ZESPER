@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 })
 export class OrderComponent implements OnInit, OnDestroy {
   orderForm: FormGroup;
+  private currentCustomerName: string;
   private foods: Food[];
   private order: Order;
   private mealName: string;
@@ -32,6 +33,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       'foods': this.formBuilder.array([])
     });
 
+    this.currentCustomerName = this.authService.getCurrentUserEmail();
 
     // new order
     this.order = new Order();
@@ -49,8 +51,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.updateOrder();
 
         this.orderSubscription = this.orderService.getOrders().first().subscribe(orders => {
-          const customer = this.authService.getCurrentUserEmail();
-          const order = _.find(orders, item => item.customer === customer);
+          const order = _.find(orders, item => item.customer === this.currentCustomerName);
           if (order) {
             this.order = order;
             this.foods = order.foods;
@@ -87,14 +88,17 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   onOrder() {
-    const userEmail = this.authService.getCurrentUserEmail();
-
     // Check if the user already has an existing order.
-    this.orderService.deleteOrder(userEmail).then(() => {
-      this.order.customer = userEmail;
+    this.orderService.deleteOrder(this.currentCustomerName).then(() => {
+      this.order.customer = this.currentCustomerName;
       this.orderService.placeOrder(this.order);
 
       this.router.navigate(['/']);
     });
+  }
+
+  deleteOrder() {
+    this.orderService.deleteOrder(this.authService.getCurrentUserEmail());
+    this.router.navigate(['/overview']);
   }
 }
