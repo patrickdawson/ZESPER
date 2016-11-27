@@ -10,14 +10,7 @@ declare var firebase;
 
 @Injectable()
 export class OrderService {
-  private _ordersInDatabase = [];
-  private _orders: Order[] = [];
-
   constructor() {
-  }
-
-  getAllOrders() {
-    return this._orders;
   }
 
   placeOrder(order: Order) {
@@ -50,6 +43,7 @@ export class OrderService {
   getOrders(): Observable<Order[]> {
     return Observable.create(observer => {
       let dbRef = firebase.database().ref('orders');
+
       let changeHandler = snapshot => {
         const ordersVal = snapshot.val();
         if (ordersVal && ordersVal.personal) {
@@ -60,7 +54,7 @@ export class OrderService {
             if (ordersData && ordersData.mustard) {
               let mustard = new Food();
               mustard.import(ordersData.mustard);
-              additionalCostPerCustomer = mustard.cost / Object.keys(this._ordersInDatabase).length;
+              additionalCostPerCustomer = mustard.cost / Object.keys(ordersData).length;
             }
             let orders: Order[] = [];
             _.forOwn(ordersData, orderData => {
@@ -80,48 +74,29 @@ export class OrderService {
         dbRef.off('value', changeHandler);
       };
     });
-
-    /*firebase.database().ref('orders').off('value');
-    firebase.database().ref('orders').on('value', (snapshot) => {
-      const orders = snapshot.val();
-      this._ordersInDatabase = [];
-      if (orders && orders.personal) {
-        this._ordersInDatabase = orders.personal;
-      }
-      const orderCount = Object.keys(this._ordersInDatabase).length;
-      if (orderCount > 0) {
-        let additionalCostPerCustomer = 0;
-        if (orders && orders.mustard) {
-          let mustard = new Food();
-          mustard.import(orders.mustard);
-          additionalCostPerCustomer = mustard.cost / Object.keys(this._ordersInDatabase).length;
-        }
-
-        this._orders = [];
-        _.forOwn(this._ordersInDatabase, orderData => {
-          let order = new Order();
-          order.import(orderData);
-          order.setAdditionalCost(additionalCostPerCustomer);
-          this._orders.push(order);
-        });
-        this.ordersChanged.emit(this._orders);
-      }
-    });*/
   }
 
   getByCustomer(customer: string) {
-    const result = _.find(this._orders, order => order.customer === customer);
-    if (!result) {
-      console.error(`Order for customer ${customer} not found!`);
-    }
+    return firebase.database().ref('orders/personal').once('value').then(snapshot => {
+      const orders = <{customer: String}[]>(snapshot.val());
+      const result = _.find(orders, order => order.customer === customer);
+      if (!result) {
+        console.error(`Order for customer ${customer} not found!`);
+      }
 
-    return result;
+      const order = new Order();
+      order.import(result);
+
+      return order;
+    });
   }
 
   deleteOrder(customer: string) {
-    let idToDelete = _.findKey(this._ordersInDatabase, item => (<Order>item).customer === customer);
-
-    firebase.database().ref(`orders/personal/${idToDelete}`).remove();
+    return firebase.database().ref('orders/personal').once('value').then(snapshot => {
+      const orders = <{customer: String}[]>(snapshot.val());
+      let idToDelete = _.findKey(orders, item => (<Order>item).customer === customer);
+      firebase.database().ref(`orders/personal/${idToDelete}`).remove();
+    });
   }
 
   deleteAllOrders() {
@@ -145,7 +120,6 @@ export class OrderService {
 
       return () => {
         if (!once) {
-          console.log('Calling of on firebase ref.');
           areOrdersAllowedRef.off('value', valueChangedHandler);
         }
       };

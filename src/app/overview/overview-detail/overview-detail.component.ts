@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../shared/order';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ze-overview-detail',
@@ -12,6 +13,7 @@ export class OverviewDetailComponent implements OnInit, OnDestroy {
   private subscription;
   private order: Order;
   private customer: string;
+  //private orderSubscription: Subscription;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -21,16 +23,20 @@ export class OverviewDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.route.params.subscribe((params: any) => {
       this.customer = params['customer'];
-      this.order = this.orderService.getByCustomer(this.customer);
+      /*this.orderSubscription = */
+      this.orderService.getByCustomer(this.customer).then(order => {
+        this.order = order;
 
-      if (!this.order) {
-        this.router.navigate(['/overview']);
-      }
+        if (!this.order) {
+          this.router.navigate(['/overview']);
+        }
+      });
     });
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    //this.orderSubscription.unsubscribe();
   }
 
   deleteOrder() {
