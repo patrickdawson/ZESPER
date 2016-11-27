@@ -23,6 +23,7 @@ import { MealOfWeekSelectorComponent } from './admin/meal-of-week-selector/meal-
 import { MustardSelectionComponent } from './overview/mustard-selection/mustard-selection.component';
 import { SwitchComponent } from './admin/switch/switch.component';
 import { ClosedBannerComponent } from './closed-banner/closed-banner.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ClosedBannerComponent } from './closed-banner/closed-banner.component';
     MealOfWeekSelectorComponent,
     MustardSelectionComponent,
     SwitchComponent,
-    ClosedBannerComponent
+    ClosedBannerComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
