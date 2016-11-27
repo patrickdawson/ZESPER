@@ -18,6 +18,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   private currentCustomerName: string;
   private foods: Food[];
   private order: Order;
+  private storedOrder: Order;
   private mealName: string;
   private orderSubscription: Subscription;
 
@@ -53,6 +54,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.orderSubscription = this.orderService.getOrders().first().subscribe(orders => {
           const order = _.find(orders, item => item.customer === this.currentCustomerName);
           if (order) {
+            this.storedOrder = order;
             this.order = order;
             this.foods = order.foods;
             for (let i = 0; i < this.foods.length; ++i) {
@@ -98,7 +100,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   deleteOrder() {
-    this.orderService.deleteOrder(this.authService.getCurrentUserEmail());
+    this.storedOrder = null;
+    this.orderService.deleteOrder(this.currentCustomerName);
     this.router.navigate(['/overview']);
   }
 }
