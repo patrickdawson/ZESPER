@@ -71,6 +71,7 @@ export class OrderService {
       dbRef.on('value', changeHandler);
 
       return () => {
+        console.log('Removing getOrders subscription');
         dbRef.off('value', changeHandler);
       };
     });

@@ -41,24 +41,27 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.mealService.getFoodsOfWeeklyMeal()])
       .then(results => {
         this.mealName = results[0];
+        this.foods = results[1];
 
-        this.orderSubscription = this.orderService.getOrders().subscribe(orders => {
+        for (let food of this.foods) {
+          (<FormArray>this.orderForm.controls['foods']).push(new FormControl(food.quantity, Validators.required));
+        }
+        this.updateOrder();
+
+        this.orderSubscription = this.orderService.getOrders().first().subscribe(orders => {
           const customer = this.authService.getCurrentUserEmail();
           const order = _.find(orders, item => item.customer === customer);
           if (order) {
             this.order = order;
             this.foods = order.foods;
+            for (let i = 0; i < this.foods.length; ++i) {
+              (<FormArray>this.orderForm.controls['foods']).controls[i].setValue(this.foods[i].quantity);
+            }
           } else {
             this.order = new Order();
-            this.foods = results[1];
-          }
-
-          for (let food of this.foods) {
-            (<FormArray>this.orderForm.controls['foods']).push(new FormControl(food.quantity, Validators.required));
           }
 
           this.updateOrder();
-          this.orderSubscription.unsubscribe();
         });
       });
   }
