@@ -9,6 +9,7 @@
                  class="form-control"
                  id="email"
                  formControlName="email">
+          <div *ngIf="signupForm.controls['email'].invalid && signupForm.controls['email'].touched" class="alert alert-danger">Ungültige Email Adresse</div>
         </div>
         <div class="form-group" formGroupName="passwords">
           <label for="password">Passwort:</label>
@@ -28,16 +29,16 @@
   </div>
   <div class="col-xs-12" *ngIf="!signupForm.controls.passwords.valid && signupForm.controls.passwords.errors">
     <br>
-    <div class="bg-danger" *ngIf="signupForm.controls['passwords'].errors.notIdentical">
+    <div class="alert alert-danger" *ngIf="signupForm.controls['passwords'].errors.notIdentical">
         Passwörter stimmen nicht überein.
     </div>
-    <div class="bg-warning" *ngIf="signupForm.controls['passwords'].errors.notConfirmed">
+    <div class="alert alert-danger" *ngIf="signupForm.controls['passwords'].errors.notConfirmed">
       Bitte Passwort bestätigen
     </div>
   </div>
   <div class="col-xs-12" *ngIf="success">
     <br>
-    <div class="bg-success">
+    <div class="alert alert-success">
       <p>
         Deine Anmeldung war erfolgreich.
       </p>
@@ -45,7 +46,7 @@
   </div>
   <div class="col-xs-12" *ngIf="error">
     <br>
-    <div class="bg-danger">
+    <div class="alert alert-danger">
       <p>{{error}}</p>
     </div>
   </div>
