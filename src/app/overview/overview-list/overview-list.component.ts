@@ -3,6 +3,7 @@ import { OrderService } from '../../services/order.service';
 import { Order } from '../../shared';
 import { MealService } from '../../services/meal.service';
 import { Food } from '../../shared/food';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'ze-overview-list',

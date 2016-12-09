@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Food } from '../shared/food';
 import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'ze-order',

@@ -1,4 +1,5 @@
 import { Serializeable } from './serializeable';
+import * as _ from 'lodash';
 
 export class Food extends Serializeable{
   constructor(public name: string = '',
@@ -17,3 +18,4 @@ export class Food extends Serializeable{
     });
   }
 }
+
