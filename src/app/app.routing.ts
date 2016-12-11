@@ -1,20 +1,22 @@
 /**
  * Created by Patrick Dawson on 18.09.2016.
  */
-import { Routes, RouterModule } from '@angular/router';
-import { OverviewComponent } from './overview/overview.component';
-import { OrderComponent } from './order/order.component';
-import { AdminComponent } from './admin/admin.component';
-import { SignupComponent } from './header/signup/signup.component';
-import { SigninComponent } from './header/signin/signin.component';
-import { AuthGuard, OrderGuard } from './shared';
-import { ClosedBannerComponent } from './closed-banner/closed-banner.component';
+import {Routes, RouterModule} from '@angular/router';
+import {OverviewComponent} from './overview/overview.component';
+import {OrderComponent} from './order/order.component';
+import {AdminComponent} from './admin/admin.component';
+import {SignupComponent} from './header/signup/signup.component';
+import {SigninComponent} from './header/signin/signin.component';
+import {AuthGuard, OrderGuard} from './shared';
+import {ClosedBannerComponent} from './closed-banner/closed-banner.component';
+import {LandingPageComponent} from './landing-page/landing-page.component';
 
 const APP_ROUTES: Routes = [
-  {path: '', redirectTo: '/overview', pathMatch: 'full'},
-  {path: 'overview', component: OverviewComponent, canActivate: [OrderGuard]},
-  {path: 'overview', component: OverviewComponent, canActivate: [OrderGuard]},
-  {path: 'order', component: OrderComponent, canActivate: [AuthGuard]},
+  {path: '', redirectTo: '/landing', pathMatch: 'full'},
+  {path: 'landing', component: LandingPageComponent},
+  {path: 'overview', component: OverviewComponent, canActivate: [AuthGuard, OrderGuard]},
+  {path: 'overview', component: OverviewComponent, canActivate: [AuthGuard, OrderGuard]},
+  {path: 'order', component: OrderComponent, canActivate: [AuthGuard, OrderGuard]},
   {path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
   {path: 'signin', component: SigninComponent},
   {path: 'signup', component: SignupComponent},
