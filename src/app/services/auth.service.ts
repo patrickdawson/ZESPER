@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import 'rxjs/Rx';
+import { Observable, ReplaySubject } from 'rxjs';
 
 declare var firebase: any;
 
@@ -24,6 +26,12 @@ export class AuthService {
     firebase.auth().onAuthStateChanged(user => {
       callback(user);
     });
+  }
+
+  getAuthState(): Observable<boolean> {
+    let result = new ReplaySubject<boolean>(1);
+    firebase.auth().onAuthStateChanged(result);
+    return result;
   }
 
   getCurrentUserEmail() {

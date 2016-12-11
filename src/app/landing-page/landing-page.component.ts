@@ -13,8 +13,8 @@ export class LandingPageComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.authService.onAuthStateChanged((user) => {
-      if (!user) {
+    this.authService.getAuthState().first().subscribe((isAuth) => {
+      if (!isAuth) {
         this.router.navigate(['/signin']);
       } else {
         this.router.navigate(['/overview']);
