@@ -25,8 +25,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.authenticated = true;
         // Check if the user is an admin
         this.authService.isAdmin(user).then(result => {
-          console.log("Hello admin");
           this.isAdmin = result;
+          if (this.isAdmin) {
+            console.log("Hello admin");
+          }
         });
       } else {
         this.authenticated = false;
