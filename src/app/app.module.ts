@@ -23,7 +23,6 @@ import { MustardSelectionComponent } from './overview/mustard-selection/mustard-
 import { SwitchComponent } from './admin/switch/switch.component';
 import { ClosedBannerComponent } from './closed-banner/closed-banner.component';
 import { FooterComponent } from './footer/footer.component';
-import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @NgModule({
   declarations: [
@@ -40,8 +39,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     MustardSelectionComponent,
     SwitchComponent,
     ClosedBannerComponent,
-    FooterComponent,
-    LandingPageComponent
+    FooterComponent
   ],
   imports: [
     BrowserModule,

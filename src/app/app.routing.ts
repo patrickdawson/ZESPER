@@ -9,11 +9,9 @@ import {SignupComponent} from './header/signup/signup.component';
 import {SigninComponent} from './header/signin/signin.component';
 import {AuthGuard, OrderGuard} from './shared';
 import {ClosedBannerComponent} from './closed-banner/closed-banner.component';
-import {LandingPageComponent} from './landing-page/landing-page.component';
 
 const APP_ROUTES: Routes = [
-  {path: '', redirectTo: '/landing', pathMatch: 'full'},
-  {path: 'landing', component: LandingPageComponent},
+  {path: '', redirectTo: '/overview', pathMatch: 'full'},
   {path: 'overview', component: OverviewComponent, canActivate: [AuthGuard, OrderGuard]},
   {path: 'overview', component: OverviewComponent, canActivate: [AuthGuard, OrderGuard]},
   {path: 'order', component: OrderComponent, canActivate: [AuthGuard, OrderGuard]},
