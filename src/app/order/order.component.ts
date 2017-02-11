@@ -40,9 +40,11 @@ export class OrderComponent implements OnInit, OnDestroy {
     // new order
     this.order = new Order();
 
-    Promise.all([
+    const promises: [Promise<string>, Promise<Food[]>] = [
       this.mealService.getWeeklyMealName(),
-      this.mealService.getFoodsOfWeeklyMeal()])
+      this.mealService.getFoodsOfWeeklyMeal()];
+
+    Promise.all(promises)
       .then(results => {
         this.mealName = results[0];
         this.foods = results[1];

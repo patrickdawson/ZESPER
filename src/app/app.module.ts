@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { ModalModule, DropdownModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { ModalModule, DropdownModule } from 'ng2-bootstrap';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -47,8 +47,8 @@ import { FooterComponent } from './footer/footer.component';
     HttpModule,
     ReactiveFormsModule,
     Routing,
-    ModalModule,
-    DropdownModule
+    ModalModule.forRoot(),
+    DropdownModule.forRoot()
   ],
   providers: [
     AuthService,
