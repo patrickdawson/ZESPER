@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { HostBinding, HostListener } from '@angular/core/src/metadata/directives';
+import { HostBinding, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[zedropdown]'
